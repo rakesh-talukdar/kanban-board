@@ -32,7 +32,12 @@ class Todo extends Component {
         if (this.state.tasks !== undefined) {
             const todoTasks = this.state.tasks.map((task) => {
                 if (task.status === 'todo') {
-                    return (<li key={task.id} className='task-card'>{task.task}</li>);
+                    return (
+                        <li key={task.id} className='task-card'>
+                            <span>{task.task}</span>
+                            <button className='delete-task-btn' id={task.id} onClick={this.handleDelete}>X</button>
+                        </li>
+                    );
                 }
             });
             return todoTasks;
@@ -76,6 +81,19 @@ class Todo extends Component {
                 error: true,
                 errorText: 'Task length should be minimum 2 characters!!',
             });
+        }
+    }
+
+    handleDelete = async (event) => {
+        event.preventDefault();
+        const taskId = event.target.id;
+        try {
+            const response = await axios.delete(`http://localhost:3000/tasks/${taskId}`);
+            if (response.status === 200) {
+                this.getTodoList();
+            }
+        } catch (error) {
+            console.error('Oops!! Couldn\'t able to delete');
         }
     }
 
