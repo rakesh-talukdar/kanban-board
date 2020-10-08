@@ -37,7 +37,7 @@ input, button {
 .task-list-card {
   min-height: 80vh;
   flex-basis: 20em;
-  margin: 0 0.5em;
+  margin: 0.5em;
   border-radius: 10px;
   border: 1px solid rgb(80, 76, 76);
 }
@@ -71,7 +71,11 @@ input, button {
   border-radius: 5px;
   overflow: hidden;
 }
+.task-title {
+  flex-grow: 1;
+}
 
+/* Style for Add task*/
 .add-task-form {
   display: flex;
   padding: 0 0.2em; 
@@ -118,3 +122,4 @@ input, button {
   transform: scale(1.1);
   align-self: flex-start;
 }
+ 
