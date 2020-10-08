@@ -32,7 +32,12 @@ class DoingTaskList extends Component {
         if (this.state.tasks !== undefined) {
             const doingTasks = this.state.tasks.map((task) => {
                 if (task.status === 'doing') {
-                    return (<li key={task.id} className='task-card'>{task.task}</li>);
+                    return (
+                        <li key={task.id} className='task-card'>
+                            <span onClick={(event) => { this.toggleUpdateForm(event.target.id) }} id={task.id} className={'task-title'}>{task.task}</span>
+                            <button className='delete-task-btn' id={task.id} onClick={this.handleDelete}>X</button>
+                        </li>
+                    );
                 }
             });
             return doingTasks;
@@ -78,6 +83,20 @@ class DoingTaskList extends Component {
             });
         }
     }
+
+    handleDelete = async (event) => {
+        event.preventDefault();
+        const taskId = event.target.id;
+        try {
+            const response = await axios.delete(`http://localhost:3000/tasks/${taskId}`);
+            if (response.status === 200) {
+                this.getDoingTaskList();
+            }
+        } catch (error) {
+            console.error('Oops!! Couldn\'t able to delete', error);
+        }
+    }
+
 
     render() {
         return (
