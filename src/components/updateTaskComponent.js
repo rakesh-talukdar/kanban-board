@@ -10,17 +10,16 @@ const UpdateTask = (props) => {
     }
 
     useEffect(() => {
-        const fetchTask = (async () => {
+        (async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/tasks/${props.taskId}`);
                 const data = response.data;
                 setTask(data.task);
-
             } catch (error) {
                 console.error('Error ', error)
             }
         })();
-    }, [])
+    }, [props.taskId])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,7 +28,7 @@ const UpdateTask = (props) => {
                 task,
             }
             if (data.task.length > 2) {
-                const response = await axios({
+                await axios({
                     method: 'patch',
                     url: `http://localhost:3000/tasks/${props.taskId}`,
                     data
