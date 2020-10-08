@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import UpdateTask from './updateTaskComponent';
 
 class Todo extends Component {
     constructor(props) {
@@ -9,6 +10,7 @@ class Todo extends Component {
             task: '',
             error: false,
             errorText: '',
+            showUpdateForm: false,
         };
     }
 
@@ -34,7 +36,7 @@ class Todo extends Component {
                 if (task.status === 'todo') {
                     return (
                         <li key={task.id} className='task-card'>
-                            <span>{task.task}</span>
+                            <span onClick={(event) => { this.toggleUpdateForm(event.target.id) }} id={task.id} className={'task-title'}>{task.task}</span>
                             <button className='delete-task-btn' id={task.id} onClick={this.handleDelete}>X</button>
                         </li>
                     );
@@ -97,6 +99,15 @@ class Todo extends Component {
         }
     }
 
+
+    toggleUpdateForm = (taskId) => {
+        this.setState({
+            showUpdateForm: !this.state.showUpdateForm,
+            taskId,
+        })
+    }
+
+
     render() {
         return (
             <div className='task-list-card'>
@@ -104,6 +115,7 @@ class Todo extends Component {
                     <h3 >Todo</h3>
                 </header>
                 <ul className='task-list'>
+                    {this.state.showUpdateForm === true ? <UpdateTask taskId={this.state.taskId} todoList={this.getTodoList} toggle={this.toggleUpdateForm} /> : null}
                     {this.displayTodoList()}
                 </ul>
                 <p className='error-display'>{this.state.errorText}</p>
