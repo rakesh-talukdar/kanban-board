@@ -6,25 +6,33 @@ class Todo extends Component {
         super(props);
         this.state = {
             tasks: [],
+            task: '',
+            error: false,
+            errorText: '',
         };
     }
 
     componentDidMount() {
+        this.getTodoList();
+    }
+
+    getTodoList = () => {
         axios.get('http://localhost:3000/tasks')
             .then((response) => response.data)
             .then((data) => {
                 this.setState({
                     tasks: data,
+                    task: '',
                 });
             })
             .catch((error) => console.error(error));
-    }
+    };
 
-    getTasks = () => {
+    displayTodoList = () => {
         if (this.state.tasks !== undefined) {
             const todoTasks = this.state.tasks.map((task) => {
                 if (task.status === 'todo') {
-                    return (<li key={task.id} className='task-card'>{task.title}</li>);
+                    return (<li key={task.id} className='task-card'>{task.task}</li>);
                 }
             });
             return todoTasks;
@@ -33,6 +41,44 @@ class Todo extends Component {
         }
     };
 
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({
+            [name]: value,
+        });
+    }
+
+    handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = {
+            task: this.state.task,
+            status: 'todo',
+        };
+
+        if (data.task.length > 2) {
+            try {
+                const response = await axios({
+                    method: 'post',
+                    url: 'http://localhost:3000/tasks',
+                    data,
+                });
+                if (response.status === 201 || response.status === 200) {
+                    this.getTodoList();
+                }
+            } catch (error) {
+                this.setState({
+                    error: true,
+                    errorText: 'Oops!! Couldn\'t able to add',
+                });
+            }
+        } else {
+            this.setState({
+                error: true,
+                errorText: 'Task length should be minimum 2 characters!!',
+            });
+        }
+    }
+
     render() {
         return (
             <div className='task-list-card'>
@@ -40,8 +86,20 @@ class Todo extends Component {
                     <h3 >Todo</h3>
                 </header>
                 <ul className='task-list'>
-                    {this.getTasks()}
+                    {this.displayTodoList()}
                 </ul>
+                <p className='error-display'>{this.state.errorText}</p>
+                <form className='add-task-form' onSubmit={this.handleSubmit}>
+                    <input
+                        type='text'
+                        className='add-task-input'
+                        name='task'
+                        placeholder='Add task'
+                        onChange={this.handleChange}
+                        value={this.state.task}
+                    />
+                    <button type='submit' className='add-task-btn'>Add</button>
+                </form>
             </div>
         );
     }
