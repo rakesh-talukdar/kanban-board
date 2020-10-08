@@ -70,6 +70,9 @@ class CompletedTaskList extends Component {
                 });
                 if (response.status === 201 || response.status === 200) {
                     this.getCompletedTaskList();
+                    this.setState({
+                        error: false,
+                    });
                 }
             } catch (error) {
                 this.setState({

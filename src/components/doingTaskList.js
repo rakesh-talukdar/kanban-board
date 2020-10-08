@@ -71,6 +71,9 @@ class DoingTaskList extends Component {
                 });
                 if (response.status === 201 || response.status === 200) {
                     this.getDoingTaskList();
+                    this.setState({
+                        error: false,
+                    });
                 }
             } catch (error) {
                 this.setState({
@@ -122,7 +125,7 @@ class DoingTaskList extends Component {
                         : null}
                     {this.displayDoingTaskList()}
                 </ul>
-                <p className='error-display'>{this.state.errorText}</p>
+                <p className='error-display'>{this.state.error && this.state.errorText}</p>
                 <form className='add-task-form' onSubmit={this.handleSubmit}>
                     <input
                         type='text'
