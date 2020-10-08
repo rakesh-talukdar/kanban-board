@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import UpdateTask from './updateTaskComponent';
 
 const Todo = (props) => {
     const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
     const [taskId, setTaskId] = useState(false);
+    const [task, setTask] = useState('');
+    const [error, setError] = useState({ hasError: false, errorMsg: '' });
 
 
     const displayTodoList = () => {
@@ -25,15 +27,21 @@ const Todo = (props) => {
 
 
     const handleChange = (event) => {
-        props.onChange(event.target.value);
+        setTask(event.target.value);
     };
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const status = 'todo'
-        props.onSubmit(status)
-    }
+        if (task.length > 2) {
+            const status = 'todo'
+            props.onSubmit(task, status);
+            setTask('');
+            setError({ hasError: false, errorMsg: '', });
+        } else {
+            setError({ hasError: true, errorMsg: 'Task length should be minimum 2 characters!!' });
+        }
+    };
 
 
     const handleDelete = (event) => {
@@ -59,7 +67,7 @@ const Todo = (props) => {
                 {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggle={toggleUpdateTaskForm} /> : null}
                 {displayTodoList()}
             </ul>
-            <p className='error-display'>{props.error.hasError === true && props.error.errorMsg}</p>
+            <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
             <form className='add-task-form' onSubmit={handleSubmit}>
                 <input
                     type='text'
@@ -67,11 +75,11 @@ const Todo = (props) => {
                     name='task'
                     placeholder='Add task'
                     onChange={handleChange}
-                    value={props.task}
+                    value={task}
                 />
                 <button type='submit' className='add-task-btn'>Add</button>
             </form>
-        </div >
+        </div>
     );
 };
 
