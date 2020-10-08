@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import UpdateTask from './updateTaskComponent';
 
 class CompletedTaskList extends Component {
     constructor(props) {
@@ -97,6 +98,13 @@ class CompletedTaskList extends Component {
         }
     }
 
+    toggleUpdateForm = (taskId) => {
+        this.setState({
+            showUpdateForm: !this.state.showUpdateForm,
+            taskId,
+        })
+    }
+
     render() {
         return (
             <div className='task-list-card'>
@@ -104,6 +112,12 @@ class CompletedTaskList extends Component {
                     <h3 >Completed</h3>
                 </header>
                 <ul className='task-list'>
+                    {this.state.showUpdateForm === true ?
+                        <UpdateTask
+                            taskId={this.state.taskId}
+                            todoList={this.getCompletedTaskList}
+                            toggle={this.toggleUpdateForm} />
+                        : null}
                     {this.displayCompletedTaskList()}
                 </ul>
                 <p className='error-display'>{this.state.errorText}</p>
