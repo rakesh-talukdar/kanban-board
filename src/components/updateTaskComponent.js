@@ -34,10 +34,8 @@ const UpdateTask = (props) => {
                     url: `http://localhost:3000/tasks/${props.taskId}`,
                     data
                 })
-                if (response.status === 200) {
-                    setTask('');
-                    props.toggle();
-                }
+                setTask('');
+                props.toggle();
             }
         } catch (error) {
             console.error("Oops error occurred: ", error);
