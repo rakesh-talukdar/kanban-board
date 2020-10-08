@@ -14,13 +14,14 @@ const DoingTaskList = () => {
 
 
     useEffect(() => {
-        const getTodoList = (async () => {
+        const getDoingTaskList = (async () => {
             try {
                 const response = await axios.get('http://localhost:3000/tasks');
                 const data = response.data;
                 setTasks(data);
                 setTask('');
                 setTaskDeleted(false);
+                setTaskAdded(false);
             } catch (error) {
                 console.error(error);
             }
@@ -56,7 +57,7 @@ const DoingTaskList = () => {
         event.preventDefault();
         const data = {
             task,
-            status: 'todo',
+            status: 'doing',
         };
 
         if (task.length > 2) {
@@ -66,15 +67,13 @@ const DoingTaskList = () => {
                     url: 'http://localhost:3000/tasks',
                     data,
                 });
-                if (response.status === 201 || response.status === 200) {
-                    setTaskAdded(true);
-                }
+                setTaskAdded(true);
+
             } catch (error) {
                 setError({ hasError: true, errorMsg: 'Oops!! Couldn\'t able to add' });
             }
         } else {
             setError({ hasError: true, errorMsg: 'Task length should be minimum 2 characters!!' });
-            // setErrorMsg('Task length should be minimum 2 characters!!');
         }
     };
 
@@ -83,9 +82,9 @@ const DoingTaskList = () => {
         const taskId = event.target.id;
         try {
             const response = await axios.delete(`http://localhost:3000/tasks/${taskId}`);
-            if (response.status === 200) {
-                setTaskDeleted(true);
-            }
+            setTaskDeleted(true);
+            setError({ hasError: false });
+
         } catch (error) {
             console.error('Oops!! Couldn\'t able to delete');
         }

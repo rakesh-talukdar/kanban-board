@@ -5,7 +5,7 @@ import UpdateTask from './updateTaskComponent';
 const Todo = (props) => {
     const [tasks, setTasks] = useState([]);
     const [task, setTask] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
+    const [error, setError] = useState({ hasError: false, errorMsg: '' });
     const [taskAdded, setTaskAdded] = useState(false);
     const [taskDeleted, setTaskDeleted] = useState(false);
     const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
@@ -20,6 +20,7 @@ const Todo = (props) => {
                 setTasks(data);
                 setTask('');
                 setTaskDeleted(false);
+                setTaskAdded(false);
             } catch (error) {
                 console.error(error);
             }
@@ -68,14 +69,14 @@ const Todo = (props) => {
                     url: 'http://localhost:3000/tasks',
                     data,
                 });
-                if (response.status === 201 || response.status === 200) {
-                    setTaskAdded(true);
-                }
+                setTaskAdded(true);
+                setError({ hasError: false });
+
             } catch (error) {
-                setErrorMsg('Oops!! Couldn\'t able to add');
+                setError({ hasError: true, errorMsg: 'Oops!! Couldn\'t able to add' });
             }
         } else {
-            setErrorMsg('Task length should be minimum 2 characters!!');
+            setError({ hasError: true, errorMsg: 'Task length should be minimum 2 characters!!' });
         }
     };
 
@@ -84,9 +85,7 @@ const Todo = (props) => {
         const taskId = event.target.id;
         try {
             const response = await axios.delete(`http://localhost:3000/tasks/${taskId}`);
-            if (response.status === 200) {
-                setTaskDeleted(true);
-            }
+            setTaskDeleted(true);
         } catch (error) {
             console.error('Oops!! Couldn\'t able to delete');
         }
@@ -108,7 +107,7 @@ const Todo = (props) => {
                 {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggle={toggleUpdateTaskForm} /> : null}
                 {displayTodoList()}
             </ul>
-            <p className='error-display'>{errorMsg}</p>
+            <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
             <form className='add-task-form' onSubmit={handleTaskSubmit}>
                 <input
                     type='text'
