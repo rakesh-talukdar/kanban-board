@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import UpdateTask from './updateTaskComponent';
+
 
 class DoingTaskList extends Component {
     constructor(props) {
@@ -97,6 +99,13 @@ class DoingTaskList extends Component {
         }
     }
 
+    toggleUpdateForm = (taskId) => {
+        this.setState({
+            showUpdateForm: !this.state.showUpdateForm,
+            taskId,
+        })
+    }
+
 
     render() {
         return (
@@ -105,6 +114,12 @@ class DoingTaskList extends Component {
                     <h3 >Doing</h3>
                 </header>
                 <ul className='task-list'>
+                    {this.state.showUpdateForm === true ?
+                        <UpdateTask
+                            taskId={this.state.taskId}
+                            todoList={this.getDoingTaskList}
+                            toggle={this.toggleUpdateForm} />
+                        : null}
                     {this.displayDoingTaskList()}
                 </ul>
                 <p className='error-display'>{this.state.errorText}</p>
