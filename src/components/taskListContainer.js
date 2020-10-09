@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Todo from './todo';
-import DoingTaskList from './doingTaskList';
-import CompletedTaskList from './completedTaskList';
+import TaskSection from './taskSection';
+import taskSections from '../dataStorage/taskSection';
+
 
 const TaskListContainer = () => {
     const [tasks, setTasks] = useState([]);
@@ -62,24 +62,17 @@ const TaskListContainer = () => {
 
     return (
         <div className='task-list-container'>
-            <Todo
-                tasks={tasks}
-                onSubmit={handleTaskSubmit}
-                onDelete={handleDelete}
-                onUpdate={setTaskUpdateResult}
-            />
-            <DoingTaskList
-                tasks={tasks}
-                onSubmit={handleTaskSubmit}
-                onDelete={handleDelete}
-                onUpdate={setTaskUpdateResult}
-            />
-            <CompletedTaskList
-                tasks={tasks}
-                onSubmit={handleTaskSubmit}
-                onDelete={handleDelete}
-                onUpdate={setTaskUpdateResult}
-            />
+            {taskSections.map((taskSection) => {
+                return (
+                    <TaskSection
+                        taskSection={taskSection}
+                        tasks={tasks}
+                        onSubmit={handleTaskSubmit}
+                        onDelete={handleDelete}
+                        onUpdate={setTaskUpdateResult}
+                    />
+                );
+            })}
         </div>
     );
 };

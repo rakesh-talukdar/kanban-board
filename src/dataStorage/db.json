@@ -1,0 +1,67 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "task": "Add dropdown feature added",
+      "status": "todo"
+    },
+    {
+      "id": 2,
+      "task": "Bug fix",
+      "status": "doing"
+    },
+    {
+      "id": 3,
+      "task": "Information gathering",
+      "status": "completed"
+    },
+    {
+      "id": 4,
+      "task": "Mock API Integration",
+      "status": "completed"
+    },
+    {
+      "id": 5,
+      "task": "Complete kanban task added",
+      "status": "todo"
+    },
+    {
+      "task": "New task",
+      "status": "doing",
+      "id": 10
+    },
+    {
+      "task": "Hurray added dhe",
+      "status": "completed",
+      "id": 21
+    },
+    {
+      "task": "doing",
+      "id": 31
+    },
+    {
+      "task": "doing",
+      "id": 32
+    },
+    {
+      "task": "New task",
+      "status": "completed",
+      "id": 35
+    },
+    {
+      "task": "lkdklsdn",
+      "status": "doing",
+      "id": 36
+    },
+    {
+      "task": "sldnklksd",
+      "status": "doing",
+      "id": 37
+    },
+    {
+      "task": "ldkfsd",
+      "status": "todo",
+      "id": 39
+    }
+  ]
+}
