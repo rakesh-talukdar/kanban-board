@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const UpdateTask = (props) => {
     const [task, setTask] = useState('');
+    const [error, setError] = useState({ hasError: false, errorMsg: '' });
+
 
     const handleChange = (event) => {
         setTask(event.target.value);
@@ -25,7 +27,7 @@ const UpdateTask = (props) => {
         event.preventDefault();
         try {
             const data = {
-                task,
+                task: task.trim(),
             }
             if (data.task.length > 2) {
                 await axios({
@@ -34,7 +36,10 @@ const UpdateTask = (props) => {
                     data
                 })
                 setTask('');
+                setError({ hasError: false, errorMsg: '', });
                 props.toggle();
+            } else {
+                setError({ hasError: true, errorMsg: 'Task length should be minimum 2 characters!!' });
             }
         } catch (error) {
             console.error("Oops error occurred: ", error);
@@ -43,6 +48,7 @@ const UpdateTask = (props) => {
 
     return (
         <div className='modal'>
+            <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
             <form className='add-task-form' onSubmit={handleSubmit}>
                 <input
                     type='text'
