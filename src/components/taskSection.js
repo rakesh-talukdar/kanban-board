@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import UpdateTask from './updateTaskComponent';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+
 
 const TaskSection = (props) => {
     const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
@@ -11,14 +13,22 @@ const TaskSection = (props) => {
     const displayTaskList = () => {
         if (props.tasks !== undefined) {
             const taskCards = props.tasks.filter((task) => task.status === props.taskSection.title.toLowerCase())
-                .map((task) => {
+                .map((task, index) => {
                     return (
-                        <li key={task.id} className='task-card'
-                            draggable="true"
-                        >
-                            <span onClick={() => { toggleUpdateTaskForm(task.id) }} className={'task-title'}>{task.task}</span>
-                            <button className='delete-task-btn' id={task.id} onClick={handleDelete}>X</button>
-                        </li>
+                        <Draggable key={task.id} draggableId={task.id} index={index}>
+                            {(provided) => (
+                                <li key={task.id} className='task-card'
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+
+                                >
+                                    <span onClick={() => { toggleUpdateTaskForm(task.id) }} className={'task-title'}>{task.task}</span>
+                                    <button className='delete-task-btn' id={task.id} onClick={handleDelete}>X</button>
+                                </li>
+                            )}
+
+                        </Draggable>
                     );
                 });
             return taskCards;
@@ -65,10 +75,21 @@ const TaskSection = (props) => {
             <header className='task-list-header'>
                 <h3>{props.taskSection.title}</h3>
             </header>
-            <ul className='task-list'>
-                {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggle={toggleUpdateTaskForm} /> : null}
-                {displayTaskList()}
-            </ul>
+
+            <Droppable key={props.taskSection.id} droppableId={props.taskSection.id}>
+                {(provided) => (
+                    <ul className='task-list'
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        {...provided.dragHandleProps}
+                    >
+                        {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggle={toggleUpdateTaskForm} /> : null}
+                        {displayTaskList()}
+                        {provided.placeholder}
+                    </ul>
+                )}
+            </Droppable>
+
             <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
             <form className='add-task-form' onSubmit={handleSubmit}>
                 <input

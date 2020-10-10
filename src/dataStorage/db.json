@@ -1,67 +1,54 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "task": "Add dropdown feature added",
-      "status": "todo"
+      "task": "dummy",
+      "status": "dummy",
+      "id": "dummy"
     },
     {
-      "id": 2,
-      "task": "Bug fix",
-      "status": "doing"
-    },
-    {
-      "id": 3,
-      "task": "Information gathering",
-      "status": "completed"
-    },
-    {
-      "id": 4,
-      "task": "Mock API Integration",
-      "status": "completed"
-    },
-    {
-      "id": 5,
-      "task": "Complete kanban task added",
-      "status": "todo"
-    },
-    {
-      "task": "New task",
-      "status": "doing",
-      "id": 10
-    },
-    {
-      "task": "Hurray added dhe",
-      "status": "completed",
-      "id": 21
-    },
-    {
-      "task": "doing",
-      "id": 31
-    },
-    {
-      "task": "doing",
-      "id": 32
-    },
-    {
-      "task": "New task",
-      "status": "completed",
-      "id": 35
-    },
-    {
-      "task": "lkdklsdn",
-      "status": "doing",
-      "id": 36
-    },
-    {
-      "task": "sldnklksd",
-      "status": "doing",
-      "id": 37
-    },
-    {
-      "task": "ldkfsd",
+      "task": "Learn Redux",
       "status": "todo",
-      "id": 39
+      "id": "Juhcq8j"
+    },
+    {
+      "task": "Walk more",
+      "status": "todo",
+      "id": "o1NhOF7"
+    },
+    {
+      "task": "Drink more watter",
+      "status": "todo",
+      "id": "vsX9qDg"
+    },
+    {
+      "task": "Learning more about hooks",
+      "status": "doing",
+      "id": "XXx6vTj"
+    },
+    {
+      "task": "Learning useEffect",
+      "status": "doing",
+      "id": "ALMbn6j"
+    },
+    {
+      "task": "Coding",
+      "status": "doing",
+      "id": "QKFBWuz"
+    },
+    {
+      "task": "Fixed the bug",
+      "status": "completed",
+      "id": "LmNCVKc"
+    },
+    {
+      "task": "Resolve Nothing",
+      "status": "completed",
+      "id": "nSrIysB"
+    },
+    {
+      "task": "Mental peace",
+      "status": "completed",
+      "id": "qRVRzf_"
     }
   ]
 }

@@ -1,15 +1,15 @@
 const taskSections = [
     {
-        "id": 1,
+        "id": "todo",
         "title": "Todo",
     },
     {
-        "id": 2,
+        "id": "doing",
         "title": "Doing",
     },
     {
-        "id": 3,
+        "id": "completed",
         "title": "Completed",
-    },
+    }
 ];
 export default taskSections;
