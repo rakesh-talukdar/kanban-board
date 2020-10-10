@@ -27,8 +27,9 @@ const TaskListContainer = () => {
 
 
     const handleTaskSubmit = async (task, status) => {
+
         const data = {
-            task,
+            task: task.trim(),
             status,
         };
         try {
@@ -83,10 +84,7 @@ const TaskListContainer = () => {
             let destinationTaskId = null;
             let destinationIndex = null;
 
-            if (destinationTaskSection.length === 0) {
-                destinationIndex = -1;
-
-            } else if (destination.index !== 0 && destination.index !== destinationTaskSection.length) {
+            if (destination.index !== 0 && destination.index !== destinationTaskSection.length) {
 
                 destinationTaskId = destinationTaskSection[destination.index].id
                 destinationIndex = taskData.findIndex((task) => task.id === destinationTaskId);
