@@ -41,7 +41,6 @@ input, button {
   flex-basis: 20em;
   margin: 0.5em;
   border-radius: 10px;
-  border: 1px solid rgb(80, 76, 76);
   background-color: #EBECF0;
 
 }
@@ -74,6 +73,7 @@ input, button {
   margin-bottom: 0.5em;
   border-radius: 5px;
   overflow: hidden;
+  min-height: 3em;
 }
 .task-title {
   flex-grow: 1;
