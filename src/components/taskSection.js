@@ -1,18 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import UpdateTask from './updateTaskComponent';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { fetchTasks, addTask, deleteTask } from '../redux/actions/taskActions';
+
 
 
 const TaskSection = (props) => {
     const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
-    const [taskId, setTaskId] = useState(false);
+    const [taskId, setTaskId] = useState(null);
     const [task, setTask] = useState('');
     const [error, setError] = useState({ hasError: false, errorMsg: '' });
+    const { dispatch } = props;
+
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [props.taskAdded, props.taskDeleted, props.taskUpdated, dispatch]);
 
 
-    const displayTaskList = () => {
-        if (props.tasks !== undefined) {
-            const taskCards = props.tasks.filter((task) => task.status === props.taskSection.title.toLowerCase())
+    const displayTaskCard = () => {
+        if (props.taskCardList !== undefined) {
+            const taskCards = props.taskCardList && props.taskCardList.filter((task) => task.status === props.taskSection.title.toLowerCase())
                 .map((task, index) => {
                     return (
                         <Draggable key={task.id} draggableId={task.id} index={index}>
@@ -21,13 +29,11 @@ const TaskSection = (props) => {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-
                                 >
                                     <span onClick={() => { toggleUpdateTaskForm(task.id) }} className={'task-title'}>{task.task}</span>
                                     <button className='delete-task-btn' id={task.id} onClick={handleDelete}>X</button>
                                 </li>
                             )}
-
                         </Draggable>
                     );
                 });
@@ -45,9 +51,14 @@ const TaskSection = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
         if (task.length > 2) {
             const status = props.taskSection.title.toLowerCase();
-            props.onSubmit(task, status);
+            const data = {
+                task: task.trim(),
+                status,
+            };
+            props.dispatch(addTask(data));
             setTask('');
             setError({ hasError: false, errorMsg: '', });
         } else {
@@ -59,14 +70,13 @@ const TaskSection = (props) => {
     const handleDelete = (event) => {
         event.preventDefault();
         const taskId = event.target.id;
-        props.onDelete(taskId);
+        props.dispatch(deleteTask(taskId))
     };
 
 
     const toggleUpdateTaskForm = (taskId) => {
         setUpdateFormVisibility(!showUpdateTaskForm);
         setTaskId(taskId);
-        props.onUpdate();
     };
 
 
@@ -75,16 +85,14 @@ const TaskSection = (props) => {
             <header className='task-list-header'>
                 <h3>{props.taskSection.title}</h3>
             </header>
-
             <Droppable key={props.taskSection.id} droppableId={props.taskSection.id}>
                 {(provided) => (
                     <ul className='task-list'
                         ref={provided.innerRef}
                         {...provided.droppableProps}
-                        {...provided.dragHandleProps}
                     >
                         {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggle={toggleUpdateTaskForm} /> : null}
-                        {displayTaskList()}
+                        {displayTaskCard()}
                         {provided.placeholder}
                     </ul>
                 )}
@@ -106,4 +114,14 @@ const TaskSection = (props) => {
     );
 };
 
-export default TaskSection;
+
+const mapStateToProps = (state) => {
+    return {
+        taskCardList: state.tasks.tasks,
+        taskAdded: state.tasks.hasTaskAdded,
+        taskDeleted: state.tasks.hasTaskDeleted,
+        taskUpdated: state.tasks.hasTaskUpdated,
+    };
+};
+
+export default connect(mapStateToProps)(TaskSection)
