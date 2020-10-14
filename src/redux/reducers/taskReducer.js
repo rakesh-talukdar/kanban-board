@@ -28,9 +28,10 @@ const taskReducer = (state = initialState, action) => {
             };
 
         case actions.TASK_FETCHED:
+            const [fetchedTask] = state.tasks.filter((task) => task.id === action.payload.id);
             return {
                 ...state,
-                task: action.payload,
+                task: fetchedTask,
             };
 
         case actions.TASK_ADDED:

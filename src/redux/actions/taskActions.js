@@ -16,10 +16,12 @@ export const fetchTasksSuccess = (data) => {
 };
 
 
-export const fetchTaskAction = (data) => {
+export const fetchTaskAction = (taskId) => {
     return {
         type: actions.TASK_FETCHED,
-        payload: data,
+        payload: {
+            id: taskId,
+        },
     };
 };
 
@@ -61,14 +63,7 @@ export const fetchTasks = () => {
 
 export const fetchTask = (taskId) => {
     return (dispatch) => {
-        axios.get(`http://localhost:3000/tasks/${taskId}`)
-            .then((response) => {
-                const data = response.data;
-                dispatch(fetchTaskAction(data));
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        dispatch(fetchTaskAction(taskId));
     };
 };
 
