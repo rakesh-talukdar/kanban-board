@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import UpdateTask from './updateTaskComponent';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { fetchTask, addTask, deleteTask } from '../redux/actions/taskActions';
-
+import Form from './form';
 
 
 const TaskSection = (props) => {
     const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
     const [taskId, setTaskId] = useState(null);
-    const [task, setTask] = useState('');
-    const [error, setError] = useState({ hasError: false, errorMsg: '' });
 
     const displayTaskCard = () => {
         if (props.taskCardList !== undefined) {
@@ -38,26 +36,14 @@ const TaskSection = (props) => {
     };
 
 
-    const handleChange = (event) => {
-        setTask(event.target.value);
-    };
 
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        if (task.length > 2) {
-            const status = props.taskSection.title.toLowerCase();
-            const data = {
-                task: task.trim(),
-                status,
-            };
-            props.dispatch(addTask(data));
-            setTask('');
-            setError({ hasError: false, errorMsg: '', });
-        } else {
-            setError({ hasError: true, errorMsg: 'Task length should be minimum 2 characters!!' });
-        }
+    const handleSubmit = (task) => {
+        const status = props.taskSection.title.toLowerCase();
+        const data = {
+            task: task.trim(),
+            status,
+        };
+        props.dispatch(addTask(data));
     };
 
 
@@ -82,6 +68,7 @@ const TaskSection = (props) => {
             <header className='task-list-header'>
                 <h3>{props.taskSection.title}</h3>
             </header>
+
             <Droppable key={props.taskSection.id} droppableId={props.taskSection.id}>
                 {(provided) => (
                     <ul className='task-list'
@@ -95,18 +82,7 @@ const TaskSection = (props) => {
                 )}
             </Droppable>
 
-            <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
-            <form className='add-task-form' onSubmit={handleSubmit}>
-                <input
-                    type='text'
-                    className='add-task-input'
-                    name='task'
-                    placeholder='Add task'
-                    onChange={handleChange}
-                    value={task}
-                />
-                <button type='submit' className='add-task-btn'>Add</button>
-            </form>
+            <Form onSubmit={handleSubmit} task='' buttonName='Add' />
         </div>
     );
 };
