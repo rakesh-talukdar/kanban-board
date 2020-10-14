@@ -6,52 +6,64 @@ import taskSections from '../dataStorage/taskSectionData';
 import { dragAndDropTaskCard, fetchTasks } from '../redux/actions/taskActions';
 
 const TaskListContainer = (props) => {
-    const { dispatch } = props;
+    const { tasks, taskAdded, taskDeleted, taskUpdated, dispatch } = props;
 
     useEffect(() => {
         dispatch(fetchTasks());
-    }, [props.taskAdded, props.taskDeleted, props.taskUpdated, dispatch]);
+    }, [taskAdded, taskDeleted, taskUpdated, dispatch]);
 
 
     const handleOnDragEnd = (result) => {
         const { source, destination, draggableId } = result;
-        if (destination !== null) {
-            const taskData = [...props.tasks];
-            const destinationTaskSection = taskData.filter((data) => data.status === destination.droppableId);
 
-            if (source.droppableId === destination.droppableId) {
-                const destinationTaskId = destinationTaskSection[destination.index].id;
-                const destinationIndex = taskData.findIndex((task) => task.id === destinationTaskId);
-                taskData.filter((data, index) => {
-                    if (data.id === draggableId && destinationIndex >= 0) {
-                        let item = taskData.splice(index, 1);
-                        taskData.splice(destinationIndex, 0, item[0]);
-                    }
-                    return taskData;
-                });
+        if (destination) {
+            // Copies the tasks getting from the redux state so that mutation can be performed directly.
+            const taskList = [...tasks];
+            const destinationColumn = destination.droppableId;
+            const destinationIndex = destination.index;
+            const sourceColumn = source.droppableId;
+
+            // Finds the index of the dragged task card from the taskList array. 
+            const sourceTaskIndex = taskList.findIndex((task) => task.id === draggableId);
+            const destinationTaskList = taskList.filter((data) => data.status === destinationColumn);
+
+            // This condition executes if dragged task card source and drop destination are same otherwise else condition executes.
+            if (sourceColumn === destinationColumn) {
+                const destinationTaskId = destinationTaskList[destinationIndex].id;
+                const destinationTaskIndex = taskList.findIndex((task) => task.id === destinationTaskId);
+
+                //Extracts the dragged task card from the taskList array.  
+                const [draggedTaskCard] = taskList.splice(sourceTaskIndex, 1);
+
+                //Inserts the dragged task card in the taskList array at the index of the destination task card.  
+                taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
+
             } else {
                 let destinationTaskId = null;
-                let destinationIndex = null;
+                let destinationTaskIndex = null;
 
-                if (destination.index !== 0 && destination.index !== destinationTaskSection.length) {
-                    destinationTaskId = destinationTaskSection[destination.index].id
-                    destinationIndex = taskData.findIndex((task) => task.id === destinationTaskId);
-                } else if (destination.index === destinationTaskSection.length) {
-                    destinationIndex = taskData.length + 1;
+                // This condition executes when the dragged task card needs to be dropped in between existing cards.
+                if (destinationIndex !== 0 && destinationIndex !== destinationTaskList.length) {
+                    destinationTaskId = destinationTaskList[destinationIndex].id
+                    destinationTaskIndex = taskList.findIndex((task) => task.id === destinationTaskId);
+
+                    // This condition executes when the dragged task card needs to be dropped at the end of the existing cards or there's no card available.
+                } else if (destinationIndex === destinationTaskList.length) {
+                    destinationTaskIndex = taskList.length + 1;
                 } else {
-                    destinationIndex = 0;
+                    destinationTaskIndex = 0;
                 }
 
-                taskData.filter((data, index) => {
-                    if (data.id === draggableId && destinationIndex !== null) {
-                        data.status = destination.droppableId;
-                        let item = taskData.splice(index, 1);
-                        index < destinationIndex ? taskData.splice(destinationIndex - 1, 0, item[0]) : taskData.splice(destinationIndex, 0, item[0]);
-                    }
-                    return taskData;
-                });
+                //Extracts the dragged task card from the taskList array.  
+                const [draggedTaskCard] = taskList.splice(sourceTaskIndex, 1);
+
+                // Changes the status of to be dropped task card according the destinationColumn.
+                draggedTaskCard.status = destinationColumn;
+
+                //Inserts the dragged task card in the taskList array at the index of the destination task card depending on the source task index.  
+                sourceTaskIndex < destinationTaskIndex ? taskList.splice(destinationTaskIndex - 1, 0, draggedTaskCard) : taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
             }
-            props.dispatch(dragAndDropTaskCard(taskData));
+            props.dispatch(dragAndDropTaskCard(taskList));
         }
     };
 
@@ -81,3 +93,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(TaskListContainer);
+
+
+
+
