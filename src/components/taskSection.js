@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import UpdateTask from './updateTaskComponent';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { fetchTasks, addTask, deleteTask } from '../redux/actions/taskActions';
+import { fetchTask, addTask, deleteTask } from '../redux/actions/taskActions';
 
 
 
@@ -11,12 +11,6 @@ const TaskSection = (props) => {
     const [taskId, setTaskId] = useState(null);
     const [task, setTask] = useState('');
     const [error, setError] = useState({ hasError: false, errorMsg: '' });
-    const { dispatch } = props;
-
-    useEffect(() => {
-        dispatch(fetchTasks());
-    }, [props.taskAdded, props.taskDeleted, props.taskUpdated, dispatch]);
-
 
     const displayTaskCard = () => {
         if (props.taskCardList !== undefined) {
@@ -77,6 +71,9 @@ const TaskSection = (props) => {
     const toggleUpdateTaskForm = (taskId) => {
         setUpdateFormVisibility(!showUpdateTaskForm);
         setTaskId(taskId);
+        if (taskId !== undefined) {
+            props.dispatch(fetchTask(taskId));
+        }
     };
 
 
@@ -118,9 +115,6 @@ const TaskSection = (props) => {
 const mapStateToProps = (state) => {
     return {
         taskCardList: state.tasks.tasks,
-        taskAdded: state.tasks.hasTaskAdded,
-        taskDeleted: state.tasks.hasTaskDeleted,
-        taskUpdated: state.tasks.hasTaskUpdated,
     };
 };
 

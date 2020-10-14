@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { updateTask } from '../redux/actions/taskActions';
 
 
 const UpdateTask = (props) => {
-    const [task, setTask] = useState('');
+    const [task, setTask] = useState(props.task || '');
     const [error, setError] = useState({ hasError: false, errorMsg: '' });
-
-    useEffect(() => {
-        axios.get(`http://localhost:3000/tasks/${props.taskId}`)
-            .then((response) => {
-                const data = response.data;
-                setTask(data.task)
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, [props.taskId])
 
     const handleChange = (event) => {
         setTask(event.target.value);
@@ -39,6 +27,7 @@ const UpdateTask = (props) => {
         }
     };
 
+
     return (
         <div className='modal'>
             <p className='error-display'>{error.hasError === true && error.errorMsg}</p>
@@ -48,7 +37,7 @@ const UpdateTask = (props) => {
                     className='add-task-input'
                     name='task'
                     onChange={handleChange}
-                    value={task}
+                    defaultValue={task}
                     autoFocus
                 />
                 <button type='submit' className='add-task-btn'>Update</button>
@@ -61,7 +50,6 @@ const UpdateTask = (props) => {
 const mapStateToProps = (state) => {
     return {
         task: state.tasks.task.task,
-        // taskId: state.tasks.task.id,
     };
 };
 

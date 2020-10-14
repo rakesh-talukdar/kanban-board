@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import TaskSection from './taskSection';
 import taskSections from '../dataStorage/taskSectionData';
-import { dragAndDropTaskCard } from '../redux/actions/taskActions';
+import { dragAndDropTaskCard, fetchTasks } from '../redux/actions/taskActions';
 
 const TaskListContainer = (props) => {
+    const { dispatch } = props;
+
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [props.taskAdded, props.taskDeleted, props.taskUpdated, dispatch]);
+
 
     const handleOnDragEnd = (result) => {
         const { source, destination, draggableId } = result;
@@ -68,6 +74,9 @@ const TaskListContainer = (props) => {
 const mapStateToProps = (state) => {
     return {
         tasks: state.tasks.tasks,
+        taskAdded: state.tasks.hasTaskAdded,
+        taskDeleted: state.tasks.hasTaskDeleted,
+        taskUpdated: state.tasks.hasTaskUpdated,
     };
 };
 
