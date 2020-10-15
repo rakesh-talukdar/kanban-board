@@ -4,13 +4,15 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import TaskSection from './taskSection';
 import taskSections from '../dataStorage/taskSectionData';
 import { dragAndDropTaskCard, fetchTasks } from '../redux/actions/taskActions';
+import PropTypes from 'prop-types';
+
 
 const TaskListContainer = (props) => {
-    const { tasks, taskAdded, taskDeleted, taskUpdated, dispatch } = props;
+    const { tasks, hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch } = props;
 
     useEffect(() => {
         dispatch(fetchTasks());
-    }, [taskAdded, taskDeleted, taskUpdated, dispatch]);
+    }, [hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch]);
 
 
     const handleOnDragEnd = (result) => {
@@ -61,18 +63,21 @@ const TaskListContainer = (props) => {
                 draggedTaskCard.status = destinationColumn;
 
                 //Inserts the dragged task card in the taskList array at the index of the destination task card depending on the source task index.  
-                sourceTaskIndex < destinationTaskIndex ? taskList.splice(destinationTaskIndex - 1, 0, draggedTaskCard) : taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
+                sourceTaskIndex < destinationTaskIndex ?
+                    taskList.splice(destinationTaskIndex - 1, 0, draggedTaskCard) :
+                    taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
             }
-            props.dispatch(dragAndDropTaskCard(taskList));
+            dispatch(dragAndDropTaskCard(taskList));
         }
     };
 
     return (
         < DragDropContext onDragEnd={handleOnDragEnd} >
             <div className='task-list-container'>
-                {taskSections.length > 0 && taskSections.map((taskSection) => {
+                {taskSections && taskSections.map((taskSection) => {
+                    const taskSectionId = taskSection.id;
                     return (
-                        <TaskSection key={taskSection.id}
+                        <TaskSection key={taskSectionId}
                             taskSection={taskSection}
                         />
                     );
@@ -83,12 +88,26 @@ const TaskListContainer = (props) => {
 }
 
 
+TaskSection.defaultProps = {
+    taskSections: [],
+};
+
+TaskListContainer.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    tasks: PropTypes.array,
+    hasTaskAdded: PropTypes.bool,
+    hasTaskDeleted: PropTypes.bool,
+    hasTaskUpdated: PropTypes.bool,
+};
+
+
+
 const mapStateToProps = (state) => {
     return {
         tasks: state.tasks.tasks,
-        taskAdded: state.tasks.hasTaskAdded,
-        taskDeleted: state.tasks.hasTaskDeleted,
-        taskUpdated: state.tasks.hasTaskUpdated,
+        hasTaskAdded: state.tasks.hasTaskAdded,
+        hasTaskDeleted: state.tasks.hasTaskDeleted,
+        hasTaskUpdated: state.tasks.hasTaskUpdated,
     };
 };
 

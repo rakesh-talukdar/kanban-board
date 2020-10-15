@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
 
 const Form = (props) => {
     const [task, setTask] = useState(props.task || '');
@@ -37,6 +39,12 @@ const Form = (props) => {
             </form>
         </>
     );
+};
+
+Form.propTypes = {
+    task: PropTypes.string,
+    buttonName: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired,
 };
 
 export default Form;
