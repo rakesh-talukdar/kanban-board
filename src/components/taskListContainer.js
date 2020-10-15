@@ -41,31 +41,41 @@ const TaskListContainer = (props) => {
                 taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
 
             } else {
-                let destinationTaskId = null;
-                let destinationTaskIndex = null;
+                const todoColumn = 'todo';
+                const doingColumn = 'doing';
+                const completedColumn = 'completed';
 
-                // This condition executes when the dragged task card needs to be dropped in between existing cards.
-                if (destinationIndex !== 0 && destinationIndex !== destinationTaskList.length) {
-                    destinationTaskId = destinationTaskList[destinationIndex].id
-                    destinationTaskIndex = taskList.findIndex((task) => task.id === destinationTaskId);
+                if ((sourceColumn === todoColumn && destinationColumn === doingColumn) ||
+                    (sourceColumn === doingColumn && destinationColumn === completedColumn) ||
+                    (sourceColumn === completedColumn && destinationColumn === todoColumn)) {
 
-                    // This condition executes when the dragged task card needs to be dropped at the end of the existing cards or there's no card available.
-                } else if (destinationIndex === destinationTaskList.length) {
-                    destinationTaskIndex = taskList.length + 1;
-                } else {
-                    destinationTaskIndex = 0;
+
+                    let destinationTaskId = null;
+                    let destinationTaskIndex = null;
+
+                    // This condition executes when the dragged task card needs to be dropped in between existing cards.
+                    if (destinationIndex !== 0 && destinationIndex !== destinationTaskList.length) {
+                        destinationTaskId = destinationTaskList[destinationIndex].id
+                        destinationTaskIndex = taskList.findIndex((task) => task.id === destinationTaskId);
+
+                        // This condition executes when the dragged task card needs to be dropped at the end of the existing cards or there's no card available.
+                    } else if (destinationIndex === destinationTaskList.length) {
+                        destinationTaskIndex = taskList.length + 1;
+                    } else {
+                        destinationTaskIndex = 0;
+                    }
+
+                    //Extracts the dragged task card from the taskList array.  
+                    const [draggedTaskCard] = taskList.splice(sourceTaskIndex, 1);
+
+                    // Changes the status of to be dropped task card according the destinationColumn.
+                    draggedTaskCard.status = destinationColumn;
+
+                    //Inserts the dragged task card in the taskList array at the index of the destination task card depending on the source task index.  
+                    sourceTaskIndex < destinationTaskIndex ?
+                        taskList.splice(destinationTaskIndex - 1, 0, draggedTaskCard) :
+                        taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
                 }
-
-                //Extracts the dragged task card from the taskList array.  
-                const [draggedTaskCard] = taskList.splice(sourceTaskIndex, 1);
-
-                // Changes the status of to be dropped task card according the destinationColumn.
-                draggedTaskCard.status = destinationColumn;
-
-                //Inserts the dragged task card in the taskList array at the index of the destination task card depending on the source task index.  
-                sourceTaskIndex < destinationTaskIndex ?
-                    taskList.splice(destinationTaskIndex - 1, 0, draggedTaskCard) :
-                    taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
             }
             dispatch(dragAndDropTaskCard(taskList));
         }
