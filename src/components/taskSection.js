@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import UpdateTask from './updateTaskComponent';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { fetchTask, addTask, deleteTask } from '../redux/actions/taskActions';
-import Form from './form';
+import { fetchTask, addTask, deleteTask, updateTask } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
-
+import Modal from './modal';
 
 const TaskSection = (props) => {
-    const [showUpdateTaskForm, setUpdateFormVisibility] = useState(false);
-    const [taskId, setTaskId] = useState(null);
-    const { taskCardList, taskSection, dispatch } = props;
+    const [taskId, setTaskId] = useState(undefined);
+    const [modalVisibility, setModalVisibility] = useState(false);
+    const [buttonName, setButtonName] = useState('');
 
-    const displayTaskCard = () => {
+    const { taskCardList, taskSection, dispatch, userAssignedTasks, userAssignedTasksFilterRequest, task, user } = props;
+
+    const displayTaskCard = (taskCardList) => {
         const taskCards = taskCardList && taskCardList
             .filter((taskCard) => taskCard.status === taskSection.title.toLowerCase())
             .map((taskCard, index) => {
@@ -26,7 +26,7 @@ const TaskSection = (props) => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                             >
-                                <span onClick={() => { toggleUpdateTaskForm(taskId) }} className={'task-title'}>{task}</span>
+                                <span onClick={() => { toggleUpdateTaskModal(taskId) }} className={'task-title'}>{task}</span>
                                 <button className='delete-task-btn' id={taskId} onClick={handleDelete}>X</button>
                             </li>
                         )}
@@ -37,14 +37,19 @@ const TaskSection = (props) => {
     };
 
 
-
-    const handleSubmit = (task) => {
+    const handleSubmit = (task, user) => {
         const status = taskSection.title.toLowerCase();
         const data = {
             task: task.trim(),
+            user: user.trim(),
             status,
         };
-        dispatch(addTask(data));
+        if (taskId === undefined) {
+            return dispatch(addTask(data));
+        } else {
+            dispatch(updateTask(taskId, data));
+            return toggleModal();
+        }
     };
 
 
@@ -55,34 +60,52 @@ const TaskSection = (props) => {
     };
 
 
-    const toggleUpdateTaskForm = (taskId) => {
-        setUpdateFormVisibility(!showUpdateTaskForm);
+    const toggleUpdateTaskModal = (taskId) => {
+        setModalVisibility(!modalVisibility);
+        setButtonName('Update Task');
         setTaskId(taskId);
         taskId && dispatch(fetchTask(taskId));
     };
 
 
+    const toggleModal = () => {
+        setModalVisibility(!modalVisibility);
+        setButtonName('Add Task');
+        setTaskId(undefined);
+    };
+
+
     return (
-        < div className='task-list-card' >
-            <header className='task-list-header'>
-                <h3>{taskSection.title}</h3>
-            </header>
+        <>
+            <div className='task-list-card' >
+                <header className='task-list-header'>
+                    <h3>{taskSection.title}</h3>
+                </header>
 
-            <Droppable key={taskSection.id} droppableId={taskSection.id}>
-                {(provided) => (
-                    <ul className='task-list'
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                    >
-                        {showUpdateTaskForm === true ? <UpdateTask taskId={taskId} toggleUpdateModal={toggleUpdateTaskForm} /> : null}
-                        {displayTaskCard()}
-                        {provided.placeholder}
-                    </ul>
-                )}
-            </Droppable>
+                <Droppable key={taskSection.id} droppableId={taskSection.id}>
+                    {(provided) => (
+                        <ul className='task-list'
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                        >
+                            {userAssignedTasksFilterRequest ? displayTaskCard(userAssignedTasks) : displayTaskCard(taskCardList)}
+                            {provided.placeholder}
+                        </ul>
+                    )}
+                </Droppable>
+                <button onClick={toggleModal} className='add-task-card-btn'>Add Task Card</button>
+            </div >
 
-            <Form onSubmit={handleSubmit} task='' buttonName='Add' />
-        </div>
+            {modalVisibility ?
+                <Modal
+                    task={taskId === undefined ? '' : task}
+                    defaultUserValue={taskId === undefined ? '' : user}
+                    closeModal={toggleModal}
+                    buttonName={buttonName}
+                    onSubmit={handleSubmit} /> :
+                null
+            }
+        </>
     );
 };
 
@@ -94,6 +117,10 @@ TaskSection.defaultProps = {
 TaskSection.propTypes = {
     taskCardList: PropTypes.array,
     taskSection: PropTypes.object,
+    userAssignedTasks: PropTypes.array,
+    userAssignedTasksFilterRequest: PropTypes.bool,
+    task: PropTypes.string,
+    user: PropTypes.string
 };
 
 
@@ -101,7 +128,12 @@ TaskSection.propTypes = {
 const mapStateToProps = (state) => {
     return {
         taskCardList: state.tasks.tasks,
+        userAssignedTasks: state.tasks.userAssignedTasks,
+        userAssignedTasksFilterRequest: state.tasks.userAssignedTasksFilterRequest,
+        task: state.tasks.task.task,
+        user: state.tasks.task.user,
     };
+
 };
 
 export default connect(mapStateToProps)(TaskSection)
