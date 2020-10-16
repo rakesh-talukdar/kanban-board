@@ -7,6 +7,8 @@ const initialState = {
     hasTaskAdded: false,
     hasTaskUpdated: false,
     hasTaskDeleted: false,
+    userAssignedTasks: [],
+    userAssignedTasksFilterRequest: false,
 };
 
 const taskReducer = (state = initialState, action) => {
@@ -25,6 +27,7 @@ const taskReducer = (state = initialState, action) => {
                 hasTaskUpdated: false,
                 hasTaskDeleted: false,
                 tasks: action.payload,
+                userAssignedTasksFilterRequest: false,
             };
 
         case actions.TASK_FETCHED:
@@ -51,6 +54,20 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 hasTaskDeleted: true,
+            };
+
+        case actions.USER_TASK_FILTERED:
+            const userAssignedTasks = state.tasks.filter((task) => task.user === action.payload);
+            return {
+                ...state,
+                userAssignedTasksFilterRequest: true,
+                userAssignedTasks,
+            };
+
+        case actions.SHOW_ALL_TASKS:
+            return {
+                ...state,
+                userAssignedTasksFilterRequest: false,
             };
 
         default: return state;

@@ -33,7 +33,6 @@ export const addTaskAction = () => {
 };
 
 export const updateTaskAction = () => {
-    console.log("Update task action")
     return {
         type: actions.TASK_UPDATED,
     };
@@ -44,6 +43,21 @@ export const deleteTaskAction = () => {
         type: actions.TASK_DELETED,
     };
 };
+
+export const fetchUserAssignedTasksAction = (user) => {
+    return {
+        type: actions.USER_TASK_FILTERED,
+        payload: user,
+    };
+};
+
+
+export const showAllTaskFilterAction = (user) => {
+    return {
+        type: actions.SHOW_ALL_TASKS,
+    };
+};
+
 
 
 export const fetchTasks = () => {
@@ -112,5 +126,18 @@ export const deleteTask = (taskId) => {
 export const dragAndDropTaskCard = (data) => {
     return (dispatch) => {
         dispatch(fetchTasksSuccess(data));
+    };
+};
+
+
+export const fetchUserAssignedTasks = (user) => {
+    return (dispatch) => {
+        dispatch(fetchUserAssignedTasksAction(user));
+    };
+};
+
+export const showAllTaskFilter = () => {
+    return (dispatch) => {
+        dispatch(showAllTaskFilterAction());
     };
 };
