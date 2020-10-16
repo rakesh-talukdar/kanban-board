@@ -1,13 +1,15 @@
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #9d86c9;
+  background-color: #063634;
+
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 
 }
 
@@ -19,30 +21,88 @@ input, button {
   border: none;
 }
 
+/* Style for header section */
 .header {
   display: flex;
   justify-content: center;
-  margin: 1em 0;
+  background-color: #157570;
+}
+
+.header-wrapper {
+  flex-basis: 52%;
+  display: flex;
+  justify-content: space-between;
 }
 .heading {
   text-transform: uppercase;
   font-weight: 600;
   color: rgb(236, 218, 218);
-
+  flex-grow: 1;
+  flex-basis: 50%;
 }
 
+.search-and-filter-wrapper {
+  flex-basis: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.search-container {
+  flex-basis: 60%;
+  flex-grow: 1;
+}
+.search-input {
+  padding: 0.8em 0.5em;
+  width: 65%;
+  border-radius: 5px;
+}
+.search-btn {
+  padding: 0.7em 0.8em;
+  margin-left: 0.5em;
+  border-radius: 8px;
+  background-color: #FBFFFE;
+  color: #000;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  transform: scale(1.1);
+  background-color: rgb(197, 38, 104);;
+  color: #FBFFFE;
+}
+
+.filter-container {
+  flex-basis: 40%;
+  padding: 0em;
+}
+.filter-select {
+  padding: 0.5em 0.5em;
+  border: none;
+  outline: none;
+  font-size: 0.9em;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+.filter-select option {
+  cursor: pointer;
+  font-size: 1.2em;
+}
+/* Style for task section */
 .task-list-container {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top: 3em;
 }
 
 .task-list-card {
   flex-basis: 20em;
   margin: 0.5em;
+  padding-bottom: 2em;
   border-radius: 10px;
   background-color: #EBECF0;
-
 }
 
 .task-list-header {
@@ -74,43 +134,24 @@ input, button {
   border-radius: 5px;
   overflow: hidden;
   min-height: 3em;
+  cursor: pointer;
 }
 .task-title {
   flex-grow: 1;
+  cursor: pointer;
 }
-
-/* Style for Add task*/
-.add-task-form {
-  display: flex;
-  padding: 0 0.2em; 
-  margin-bottom: 2em;
-}
-
-.add-task-input {
-  flex-basis: 70%;
-  margin:  0 0.5em;
-  padding: 0.6em;
-  box-shadow: 0px 0px 3px 3px #ccc;
+.add-task-card-btn {
+  background-color:  rgb(31, 105, 128);
+  padding: 0.6em 1em;
+  margin: 0.5em 30%;
+  font-size: 0.9em;
+  color: #fff;
   border-radius: 5px;
-  outline: none;
-  border: none;
+  cursor: pointer;
 }
-.add-task-btn {
-  flex-basis: 20%;
-  padding: 0.5em 0em;
-  background-color: #ccc;
-  border-radius: 5px;
-  outline: none;
-  border: none;
-}
-
-.add-task-btn:hover {
-  background-color: rgb(206, 198, 198);
-}
-
-.error-display {
-  color: rgb(248, 11, 11);;
-  padding: 0 0.5em;
+.add-task-card-btn:hover {
+  transform: scale(1.1);
+  background-color: rgb(23, 76, 92);
 }
 
 /* Style for delete task button */
@@ -118,6 +159,7 @@ input, button {
   color: rgb(202, 4, 4);
   background-color: #fff;
   align-self: flex-start;
+  cursor: pointer;
 }
 .delete-task-btn:hover {
   background-color: rgb(202, 4, 4);
@@ -127,3 +169,105 @@ input, button {
   align-self: flex-start;
 }
  
+
+/* Style for modal */
+.modal {
+  position: fixed;
+ top: 0;
+ left: 0;
+ background-color: rgba(0,0,0,0.4);
+  z-index: 1; 
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.modal-content {
+  margin-top: 6em;
+  padding: 1.5em;
+  width: 35%;
+  height: 65vh;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.modal-content header {
+  display: flex;
+  justify-content: flex-end;
+}
+.modal-close-btn {
+  color: rgb(202, 4, 4);
+  background-color: #fff;
+  font-size: 1.3em;
+  align-self: flex-start;
+  cursor: pointer;
+}
+.modal-close-btn:hover {
+  background-color: rgb(202, 4, 4);
+  color: #fff;
+  border-radius: 5px;
+  transform: scale(1.1);
+  align-self: flex-start;
+}
+
+
+/* Add task form  style*/
+.add-task-form {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  padding: 0 0.2em; 
+  margin: 4em 0;
+}
+
+label {
+  padding: 0 0.6em;
+  margin-top: 0.5em;
+}
+
+.add-task-input, .select-input {
+  margin:  1em 0.5em;
+  padding: 0.6em;
+  background-color: #fff;
+  box-shadow: 0px 0px 3px 3px #ccc;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+}
+
+.task-submit-btn {
+  margin:  2em 0.5em;
+  padding: 0.7em 1em;
+  font-size: 1em;
+  background-color: rgb(173, 58, 58);
+  color: #fff;
+  align-self: center;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.task-submit-btn:hover {
+  background-color: rgb(219, 57, 57);
+}
+
+.error-display {
+  color: rgb(248, 11, 11);;
+  padding: 0 0.5em;
+}
+
+
+
+
+
+
+@media (max-width: 1300px) {
+  .header-wrapper {
+    flex-basis: 80%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+}
