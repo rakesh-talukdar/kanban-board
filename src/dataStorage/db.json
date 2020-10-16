@@ -3,52 +3,73 @@
     {
       "task": "dummy",
       "status": "dummy",
-      "id": "dummy"
+      "id": "dummy",
+      "user": "dummy"
     },
     {
-      "task": "Learn Redux",
-      "status": "todo",
-      "id": "Juhcq8j"
-    },
-    {
-      "task": "Walk more",
+      "task": "Walk more daily",
+      "user": "Ronny Doe",
       "status": "todo",
       "id": "o1NhOF7"
     },
     {
-      "task": "Drink more watter",
-      "status": "todo",
-      "id": "vsX9qDg"
-    },
-    {
       "task": "Learning more about hooks",
+      "user": "Kane Doe",
       "status": "doing",
       "id": "XXx6vTj"
     },
     {
-      "task": "Learning useEffect",
-      "status": "doing",
-      "id": "ALMbn6j"
-    },
-    {
-      "task": "Coding",
-      "status": "doing",
-      "id": "QKFBWuz"
-    },
-    {
-      "task": "Fixed the bug",
-      "status": "completed",
-      "id": "LmNCVKc"
-    },
-    {
       "task": "Resolve Nothing",
+      "user": "John Doe",
       "status": "completed",
       "id": "nSrIysB"
     },
     {
-      "task": "Mental peace",
+      "task": "Hello world hbdsj",
+      "user": "Kane Doe",
       "status": "completed",
-      "id": "qRVRzf_"
+      "id": "XC4iOpo"
+    },
+    {
+      "task": "new task",
+      "user": "Ronny Doe",
+      "status": "todo",
+      "id": "uYNi6y4"
+    },
+    {
+      "task": "Code",
+      "user": "Jane Doe",
+      "status": "todo",
+      "id": "QOUtB3u"
+    },
+    {
+      "task": "Presenting demo",
+      "user": "John Doe",
+      "status": "doing",
+      "id": "LPJNqHk"
+    },
+    {
+      "task": "Completed task",
+      "status": "completed",
+      "id": "ePRsGgE"
+    },
+    {
+      "task": "new task added",
+      "user": "Jane Doe",
+      "status": "todo",
+      "id": "RMvHQzO"
+    },
+    {
+      "task": "everything good going",
+      "user": "Jane Doe",
+      "status": "todo",
+      "id": "dzn4zYD"
+    },
+    {
+      "task": "new doing",
+      "user": "Kane Doe",
+      "status": "doing",
+      "id": "aGCGOGb"
     }
   ]
 }
