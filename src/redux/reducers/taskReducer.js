@@ -9,6 +9,8 @@ const initialState = {
     hasTaskDeleted: false,
     userAssignedTasks: [],
     userAssignedTasksFilterRequest: false,
+    searchResults: [],
+    hasSearchResultFetched: false,
 };
 
 const taskReducer = (state = initialState, action) => {
@@ -28,6 +30,7 @@ const taskReducer = (state = initialState, action) => {
                 hasTaskDeleted: false,
                 tasks: action.payload,
                 userAssignedTasksFilterRequest: false,
+                hasSearchResultFetched: false,
             };
 
         case actions.TASK_FETCHED:
@@ -62,12 +65,22 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 userAssignedTasksFilterRequest: true,
                 userAssignedTasks,
+                hasSearchResultFetched: false,
             };
 
         case actions.SHOW_ALL_TASKS:
             return {
                 ...state,
                 userAssignedTasksFilterRequest: false,
+                hasSearchResultFetched: false,
+            };
+
+        case actions.SEARCH_RESULT_FETCHED:
+            const matchedTasks = state.tasks.filter((task) => task.task === action.payload);
+            return {
+                ...state,
+                searchResults: matchedTasks,
+                hasSearchResultFetched: true,
             };
 
         default: return state;

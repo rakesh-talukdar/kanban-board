@@ -51,24 +51,27 @@ input, button {
   flex-basis: 60%;
   flex-grow: 1;
 }
+.search-form {
+  display: flex;
+  align-items: center;
+}
 .search-input {
   padding: 0.8em 0.5em;
-  width: 65%;
+  width: 68%;
   border-radius: 5px;
 }
 .search-btn {
-  padding: 0.7em 0.8em;
-  margin-left: 0.5em;
+  margin-left: 0.6em; 
   border-radius: 8px;
-  background-color: #FBFFFE;
-  color: #000;
+  color: #fff;
   cursor: pointer;
+  font-size:1.4em;
+  background-color: transparent;
 }
 
 .search-btn:hover {
-  transform: scale(1.1);
-  background-color: rgb(197, 38, 104);;
-  color: #FBFFFE;
+  transform: scale(1.2);
+  color: rgb(233, 55, 129);
 }
 
 .filter-container {
@@ -127,7 +130,7 @@ input, button {
   display: flex;
   justify-content: space-between;
   flex-basis: 100%;
-  padding: 1em 0.5em;
+  padding: 0.7em;
   box-shadow: 0px 0px 3px 3px #ccc;
   background-color: #fff;
   margin-bottom: 0.5em;
@@ -136,40 +139,75 @@ input, button {
   min-height: 3em;
   cursor: pointer;
 }
+.task-card:hover {
+  transform: scale(1.03);
+}
 .task-title {
   flex-grow: 1;
   cursor: pointer;
+  margin: 0;
 }
+
+.task-card-username-and-drop-btn {
+  display: flex;
+  flex-flow: column;
+  margin: 0;
+}
+
+.task-card-username {
+  align-self: flex-end;
+  font-size: 0.7em;
+  border-radius: 50%;
+  background-color:  rgb(31, 105, 128);
+  color: #fff;
+  padding: 0.6em;
+  margin-top: 1em;
+  cursor: pointer;
+  min-width: 2em;
+  min-height: 1em;
+}
+
+.task-card-username:hover {
+  background-color:  rgb(14, 146, 187);
+  font-size: 0.72em;
+  font-weight: 600;
+  color: #fff;
+}
+
 .add-task-card-btn {
   background-color:  rgb(31, 105, 128);
-  padding: 0.6em 1em;
-  margin: 0.5em 30%;
+  padding: 0.6em;
+  margin: 0.5em 26%;
   font-size: 0.9em;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .add-task-card-btn:hover {
   transform: scale(1.1);
   background-color: rgb(23, 76, 92);
+}
+.searchIcon {
+  margin-left: 0.4em;
 }
 
 /* Style for delete task button */
 .delete-task-btn {
   color: rgb(202, 4, 4);
   background-color: #fff;
-  align-self: flex-start;
   cursor: pointer;
 }
 .delete-task-btn:hover {
   background-color: rgb(202, 4, 4);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   transform: scale(1.1);
-  align-self: flex-start;
 }
  
-
+.dropIcon {
+  pointer-events:none;
+}
 /* Style for modal */
 .modal {
   position: fixed;

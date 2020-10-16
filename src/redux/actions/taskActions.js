@@ -58,6 +58,13 @@ export const showAllTaskFilterAction = (user) => {
     };
 };
 
+export const fetchSearchResultAction = (searchInput) => {
+    return {
+        type: actions.SEARCH_RESULT_FETCHED,
+        payload: searchInput,
+    };
+}
+
 
 
 export const fetchTasks = () => {
@@ -139,5 +146,11 @@ export const fetchUserAssignedTasks = (user) => {
 export const showAllTaskFilter = () => {
     return (dispatch) => {
         dispatch(showAllTaskFilterAction());
+    };
+};
+
+export const fetchSearchResult = (searchInput) => {
+    return (dispatch) => {
+        dispatch(fetchSearchResultAction(searchInput));
     };
 };

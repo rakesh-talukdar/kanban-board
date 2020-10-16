@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import users from '../dataStorage/usersData';
-import { fetchUserAssignedTasks, showAllTaskFilter } from '../redux/actions/taskActions';
+import { fetchUserAssignedTasks, showAllTaskFilter, fetchSearchResult } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Header = (props) => {
-    const { dispatch } = props
+    const { dispatch, searchResults } = props
+    const [searchInput, setSearchInput] = useState('');
+
+    const handleSearchInputChange = (event) => {
+        setSearchInput(event.target.value);
+    };
+
+    const handleSearchSubmit = (event) => {
+        event.preventDefault();
+        dispatch(fetchSearchResult(searchInput.trim()));
+        console.log("Search Results ", searchResults);
+    };
+
+
+
     const handleUserChange = (event) => {
         const selectedValue = event.target.value;
         selectedValue === 'showAllTasks' ? dispatch(showAllTaskFilter()) : dispatch(fetchUserAssignedTasks(selectedValue));
@@ -19,9 +34,9 @@ const Header = (props) => {
                 <h1 className='heading'>Kanban Board</h1>
                 <div className='search-and-filter-wrapper'>
                     <div className='search-container'>
-                        <form className='search-form'>
-                            <input type='text' className='search-input' placeholder='Search task..' />
-                            <button className='search-btn'>Search</button>
+                        <form className='search-form' onSubmit={handleSearchSubmit}>
+                            <input type='text' className='search-input' onChange={handleSearchInputChange} placeholder='Search task..' />
+                            <button className='search-btn' title='search'><FontAwesomeIcon icon={faSearch} /></button>
                         </form>
                     </div>
                     <div className='filter-container'>
@@ -49,5 +64,12 @@ Header.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = (state) => {
+    return {
+        searchResults: state.tasks.searchResults,
+        hasSearchResultFetched: state.tasks.hasSearchResultFetched,
+    };
+};
 
-export default connect()(Header);
+
+export default connect(mapStateToProps)(Header);

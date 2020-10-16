@@ -4,13 +4,17 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { fetchTask, addTask, deleteTask, updateTask } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
 import Modal from './modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
 
 const TaskSection = (props) => {
     const [taskId, setTaskId] = useState(undefined);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [buttonName, setButtonName] = useState('');
 
-    const { taskCardList, taskSection, dispatch, userAssignedTasks, userAssignedTasksFilterRequest, task, user } = props;
+    const { taskCardList, taskSection, dispatch, userAssignedTasks, userAssignedTasksFilterRequest, task, user, hasSearchResultFetched, searchResults } = props;
 
     const displayTaskCard = (taskCardList) => {
         const taskCards = taskCardList && taskCardList
@@ -18,6 +22,8 @@ const TaskSection = (props) => {
             .map((taskCard, index) => {
                 const { task } = taskCard;
                 const taskId = taskCard.id;
+                const username = taskCard.user;
+                const userFirstName = username ? username.split(' ')[0] : '';
                 return (
                     <Draggable key={taskId} draggableId={taskId} index={index}>
                         {(provided) => (
@@ -26,9 +32,14 @@ const TaskSection = (props) => {
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}
                             >
-                                <span onClick={() => { toggleUpdateTaskModal(taskId) }} className={'task-title'}>{task}</span>
-                                <button className='delete-task-btn' id={taskId} onClick={handleDelete}>X</button>
+                                <p onClick={() => { toggleUpdateTaskModal(taskId) }} className={'task-title'}>{task}</p>
+                                <p className='task-card-username-and-drop-btn'>
+                                    <button className='delete-task-btn' id={taskId} onClick={handleDelete} ><FontAwesomeIcon icon={faTrash} className='dropIcon' /></button>
+                                    <span className='task-card-username' title={username}>{userFirstName}</span>
+                                </p>
+
                             </li>
+
                         )}
                     </Draggable>
                 );
@@ -88,12 +99,14 @@ const TaskSection = (props) => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {userAssignedTasksFilterRequest ? displayTaskCard(userAssignedTasks) : displayTaskCard(taskCardList)}
+                            {userAssignedTasksFilterRequest ? displayTaskCard(userAssignedTasks) :
+                                hasSearchResultFetched ? displayTaskCard(searchResults) :
+                                    displayTaskCard(taskCardList)}
                             {provided.placeholder}
                         </ul>
                     )}
                 </Droppable>
-                <button onClick={toggleModal} className='add-task-card-btn'>Add Task Card</button>
+                <button onClick={toggleModal} className='add-task-card-btn'>Add Task Card<FontAwesomeIcon icon={faPlus} className='searchIcon' /></button>
             </div >
 
             {modalVisibility ?
@@ -132,6 +145,8 @@ const mapStateToProps = (state) => {
         userAssignedTasksFilterRequest: state.tasks.userAssignedTasksFilterRequest,
         task: state.tasks.task.task,
         user: state.tasks.task.user,
+        searchResults: state.tasks.searchResults,
+        hasSearchResultFetched: state.tasks.hasSearchResultFetched,
     };
 
 };

@@ -9,3 +9,4 @@ export const TASK_DROPPED = 'taskDropped';
 export const USER_TASK_FILTERED = 'userTaskFiltered';
 export const TASK_SEARCHED = 'taskSearched';
 export const SHOW_ALL_TASKS = 'showAllTasks';
+export const SEARCH_RESULT_FETCHED = 'searchResultFetched';
