@@ -5,14 +5,39 @@ import TaskSection from './taskSection';
 import taskSections from '../dataStorage/taskSectionData';
 import { dragAndDropTaskCard, fetchTasks } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 
 
 const TaskListContainer = (props) => {
+
     const { tasks, hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch } = props;
 
     useEffect(() => {
         dispatch(fetchTasks());
+
+        if (hasTaskAdded) {
+            toast.success('Task added successfully', {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
+        }
+        if (hasTaskDeleted) {
+            toast.success('Task deleted successfully', {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
+        }
+        if (hasTaskUpdated) {
+            toast.success('Task updated successfully', {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
+        }
     }, [hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch]);
+
 
 
     const handleOnDragEnd = (result) => {
@@ -49,7 +74,6 @@ const TaskListContainer = (props) => {
                     (sourceColumn === doingColumn && destinationColumn === completedColumn) ||
                     (sourceColumn === completedColumn && destinationColumn === todoColumn)) {
 
-
                     let destinationTaskId = null;
                     let destinationTaskIndex = null;
 
@@ -81,9 +105,10 @@ const TaskListContainer = (props) => {
         }
     };
 
+
     return (
-        < DragDropContext onDragEnd={handleOnDragEnd} >
-            <div className='task-list-container'>
+        <div className='task-list-container'>
+            < DragDropContext onDragEnd={handleOnDragEnd} >
                 {taskSections && taskSections.map((taskSection) => {
                     const taskSectionId = taskSection.id;
                     return (
@@ -92,8 +117,8 @@ const TaskListContainer = (props) => {
                         />
                     );
                 })}
-            </div>
-        </DragDropContext >
+            </DragDropContext >
+        </div>
     );
 }
 
