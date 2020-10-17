@@ -1,156 +1,200 @@
-import axios from 'axios';
 import * as actions from './actionTypes';
 
+const errorMsg = 'Oops!! Something went wrong!!';
+
+// Fetch request actions for all tasks
 export const fetchTasksRequest = () => {
     return {
-        type: actions.TASKS_FETCH_REQUESTED,
+        type: actions.FETCH_ALL_TASKS_REQUEST,
     };
 };
 
-
 export const fetchTasksSuccess = (data) => {
     return {
-        type: actions.TASKS_FETCHED,
+        type: actions.FETCH_ALL_TASKS_SUCCESS,
         payload: data,
     };
 };
 
-
-export const fetchTaskAction = (taskId) => {
+export const fetchTasksFailure = (error) => {
     return {
-        type: actions.TASK_FETCHED,
+        type: actions.FETCH_ALL_TASKS_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+// Fetch request actions for single task
+export const fetchTaskRequest = (taskId) => {
+    return {
+        type: actions.FETCH_TASK_REQUEST,
         payload: {
-            id: taskId,
+            taskId,
+        },
+    };
+};
+
+export const fetchTaskSuccess = (taskId) => {
+    return {
+        type: actions.FETCH_TASK_SUCCESS,
+        payload: {
+            taskId,
         },
     };
 };
 
 
-export const addTaskAction = () => {
+export const fetchTaskFailure = (error) => {
     return {
-        type: actions.TASK_ADDED,
+        type: actions.FETCH_TASK_FAILURE,
+        error: errorMsg,
     };
 };
 
-export const updateTaskAction = () => {
+
+// Actions for add task
+export const addTaskRequest = (data) => {
     return {
-        type: actions.TASK_UPDATED,
+        type: actions.ADD_TASK_REQUEST,
+        payload: data,
     };
 };
 
-export const deleteTaskAction = () => {
+export const addTaskSuccess = () => {
     return {
-        type: actions.TASK_DELETED,
+        type: actions.ADD_TASK_SUCCESS,
     };
 };
 
-export const fetchUserAssignedTasksAction = (user) => {
+export const addTaskFailure = (error) => {
     return {
-        type: actions.USER_TASK_FILTERED,
+        type: actions.ADD_TASK_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+
+// Actions for update task
+export const updateTaskRequest = (taskId, data) => {
+    return {
+        type: actions.UPDATE_TASK_REQUEST,
+        payload: {
+            taskId,
+            data,
+        },
+    };
+};
+
+export const updateTaskSuccess = () => {
+    return {
+        type: actions.UPDATE_TASK_SUCCESS,
+    };
+};
+
+export const updateTaskFailure = (error) => {
+    return {
+        type: actions.UPDATE_TASK_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+// Actions for delete task
+export const deleteTaskRequest = (taskId) => {
+    return {
+        type: actions.DELETE_TASK_REQUEST,
+        payload: {
+            taskId,
+        },
+    };
+};
+
+export const deleteTaskSuccess = () => {
+    return {
+        type: actions.DELETE_TASK_SUCCESS,
+    };
+};
+
+export const deleteTaskFailure = (error) => {
+    return {
+        type: actions.DELETE_TASK_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+// Actions for user assigned tasks filter
+export const fetchUserAssignedTasksRequest = (user) => {
+    return {
+        type: actions.USER_TASK_FILTER_REQUEST,
         payload: user,
     };
 };
 
-
-export const showAllTaskFilterAction = (user) => {
+export const fetchUserAssignedTasksSuccess = (user) => {
     return {
-        type: actions.SHOW_ALL_TASKS,
+        type: actions.USER_TASK_FILTER_SUCCESS,
+        payload: user,
     };
 };
 
-export const fetchSearchResultAction = (searchInput) => {
+export const fetchUserAssignedTasksFailure = (error) => {
     return {
-        type: actions.SEARCH_RESULT_FETCHED,
+        type: actions.USER_TASK_FILTER_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+//Actions for show all tasks filter 
+export const showAllTaskFilterRequest = () => {
+    return {
+        type: actions.SHOW_ALL_TASKS_FILTER_REQUEST,
+    };
+};
+
+export const showAllTaskFilterSuccess = () => {
+    return {
+        type: actions.SHOW_ALL_TASKS_FILTER_SUCCESS,
+    };
+};
+
+export const showAllTaskFilterFailure = (error) => {
+    return {
+        type: actions.SHOW_ALL_TASKS_FILTER_FAILURE,
+        error: errorMsg,
+    };
+};
+
+
+// Actions for fetching search results
+export const fetchSearchResultsRequest = (searchInput) => {
+    return {
+        type: actions.FETCH_SEARCH_RESULTS_REQUEST,
         payload: searchInput,
     };
-}
+};
 
+export const fetchSearchResultsSuccess = (searchInput) => {
+    return {
+        type: actions.FETCH_SEARCH_RESULTS_SUCCESS,
+        payload: searchInput,
+    };
+};
 
-
-export const fetchTasks = () => {
-    return (dispatch) => {
-        dispatch(fetchTasksRequest);
-        axios.get('http://localhost:3000/tasks')
-            .then((response) => {
-                const data = response.data;
-                dispatch(fetchTasksSuccess(data));
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+export const fetchSearchResultsFailure = (error) => {
+    return {
+        type: actions.FETCH_SEARCH_RESULTS_FAILURE,
+        error: errorMsg,
     };
 };
 
 
-export const fetchTask = (taskId) => {
-    return (dispatch) => {
-        dispatch(fetchTaskAction(taskId));
-    };
-};
-
-export const addTask = (data) => {
-    return (dispatch) => {
-        axios({
-            method: 'post',
-            url: 'http://localhost:3000/tasks',
-            data,
-        }).then(() => {
-            dispatch(addTaskAction());
-        }).catch((error) => {
-            console.error('Oops!! Couldn\'t able to add', error.message);
-        });
-    };
-};
-
-
-export const updateTask = (taskId, data) => {
-    return (dispatch) => {
-        axios({
-            method: 'patch',
-            url: `http://localhost:3000/tasks/${taskId}`,
-            data,
-        }).then(() => {
-            dispatch(updateTaskAction());
-        }).catch((error) => {
-            console.error("Oops error occurred: ", error.message);
-        });
-    };
-};
-
-
-export const deleteTask = (taskId) => {
-    return (dispatch) => {
-        axios.delete(`http://localhost:3000/tasks/${taskId}`)
-            .then(() => {
-                dispatch(deleteTaskAction());
-            }).catch((error) => {
-                console.error('Oops!! Couldn\'t able to delete', error.message);
-            });
-    };
-};
-
-
-export const dragAndDropTaskCard = (data) => {
-    return (dispatch) => {
-        dispatch(fetchTasksSuccess(data));
-    };
-};
-
-
-export const fetchUserAssignedTasks = (user) => {
-    return (dispatch) => {
-        dispatch(fetchUserAssignedTasksAction(user));
-    };
-};
-
-export const showAllTaskFilter = () => {
-    return (dispatch) => {
-        dispatch(showAllTaskFilterAction());
-    };
-};
-
-export const fetchSearchResult = (searchInput) => {
-    return (dispatch) => {
-        dispatch(fetchSearchResultAction(searchInput));
+// Actions for drag and drop tasks
+export const taskDragAndDropRequest = (data) => {
+    return {
+        type: actions.TASK_DRAG_AND_DROP_REQUEST,
+        payload: data,
     };
 };

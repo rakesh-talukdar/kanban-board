@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import TaskSection from './taskSection';
 import taskSections from '../dataStorage/taskSectionData';
-import { dragAndDropTaskCard, fetchTasks } from '../redux/actions/taskActions';
+import { taskDragAndDropRequest, fetchTasksRequest } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 
 
@@ -16,7 +15,7 @@ const TaskListContainer = (props) => {
     const { tasks, hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch } = props;
 
     useEffect(() => {
-        dispatch(fetchTasks());
+        dispatch(fetchTasksRequest());
 
         if (hasTaskAdded) {
             toast.success('Task added successfully', {
@@ -36,7 +35,7 @@ const TaskListContainer = (props) => {
                 autoClose: 2000,
             });
         }
-    }, [hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch]);
+    }, [hasTaskAdded, hasTaskUpdated, hasTaskDeleted, dispatch]);
 
 
 
@@ -101,7 +100,7 @@ const TaskListContainer = (props) => {
                         taskList.splice(destinationTaskIndex, 0, draggedTaskCard);
                 }
             }
-            dispatch(dragAndDropTaskCard(taskList));
+            dispatch(taskDragAndDropRequest(taskList));
         }
     };
 
@@ -147,7 +146,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(TaskListContainer);
-
-
-
-

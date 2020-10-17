@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import users from '../dataStorage/usersData';
-import { fetchUserAssignedTasks, showAllTaskFilter, fetchSearchResult } from '../redux/actions/taskActions';
+import { fetchUserAssignedTasksRequest, showAllTaskFilterRequest, fetchSearchResultsRequest } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Header = (props) => {
-    const { dispatch, searchResults } = props
+    const { dispatch } = props
     const [searchInput, setSearchInput] = useState('');
 
     const handleSearchInputChange = (event) => {
@@ -16,15 +16,14 @@ const Header = (props) => {
 
     const handleSearchSubmit = (event) => {
         event.preventDefault();
-        dispatch(fetchSearchResult(searchInput.trim()));
-        console.log("Search Results ", searchResults);
+        dispatch(fetchSearchResultsRequest(searchInput.trim()));
     };
 
 
 
     const handleUserChange = (event) => {
         const selectedValue = event.target.value;
-        selectedValue === 'showAllTasks' ? dispatch(showAllTaskFilter()) : dispatch(fetchUserAssignedTasks(selectedValue));
+        selectedValue === 'showAllTasks' ? dispatch(showAllTaskFilterRequest()) : dispatch(fetchUserAssignedTasksRequest(selectedValue));
     };
 
     const userList = users.map((user) => <option key={user.id} value={user.name}>{user.name}</option>);
@@ -66,7 +65,6 @@ Header.propTypes = {
 
 const mapStateToProps = (state) => {
     return {
-        searchResults: state.tasks.searchResults,
         hasSearchResultFetched: state.tasks.hasSearchResultFetched,
     };
 };

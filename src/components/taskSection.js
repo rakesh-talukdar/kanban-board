@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { fetchTask, addTask, deleteTask, updateTask } from '../redux/actions/taskActions';
+import { fetchTaskRequest, addTaskRequest, deleteTaskRequest, updateTaskRequest } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
 import Modal from './modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,7 +34,9 @@ const TaskSection = (props) => {
                             >
                                 <p onClick={() => { toggleUpdateTaskModal(taskId) }} className={'task-title'}>{task}</p>
                                 <p className='task-card-username-and-drop-btn'>
-                                    <button className='delete-task-btn' id={taskId} onClick={handleDelete} ><FontAwesomeIcon icon={faTrash} className='dropIcon' /></button>
+                                    <button className='delete-task-btn' id={taskId} onClick={handleDelete} >
+                                        <FontAwesomeIcon icon={faTrash} className='dropIcon' />
+                                    </button>
                                     <span className='task-card-username' title={username}>{userFirstName}</span>
                                 </p>
 
@@ -56,9 +58,9 @@ const TaskSection = (props) => {
             status,
         };
         if (taskId === undefined) {
-            return dispatch(addTask(data));
+            return dispatch(addTaskRequest(data));
         } else {
-            dispatch(updateTask(taskId, data));
+            dispatch(updateTaskRequest(taskId, data));
             return toggleModal();
         }
     };
@@ -67,7 +69,7 @@ const TaskSection = (props) => {
     const handleDelete = (event) => {
         event.preventDefault();
         const taskId = event.target.id;
-        dispatch(deleteTask(taskId))
+        dispatch(deleteTaskRequest(taskId))
     };
 
 
@@ -75,7 +77,7 @@ const TaskSection = (props) => {
         setModalVisibility(!modalVisibility);
         setButtonName('Update Task');
         setTaskId(taskId);
-        taskId && dispatch(fetchTask(taskId));
+        taskId && dispatch(fetchTaskRequest(taskId));
     };
 
 
@@ -125,6 +127,7 @@ const TaskSection = (props) => {
 
 TaskSection.defaultProps = {
     taskCardList: [],
+    task: '',
 };
 
 TaskSection.propTypes = {
