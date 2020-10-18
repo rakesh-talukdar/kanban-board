@@ -1,7 +1,5 @@
 import * as actions from './actionTypes';
 
-const errorMsg = 'Oops!! Something went wrong!!';
-
 // Fetch request actions for all tasks
 export const fetchTasksRequest = () => {
     return {
@@ -16,10 +14,9 @@ export const fetchTasksSuccess = (data) => {
     };
 };
 
-export const fetchTasksFailure = (error) => {
+export const fetchTasksFailure = () => {
     return {
         type: actions.FETCH_ALL_TASKS_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -44,10 +41,9 @@ export const fetchTaskSuccess = (taskId) => {
 };
 
 
-export const fetchTaskFailure = (error) => {
+export const fetchTaskFailure = () => {
     return {
         type: actions.FETCH_TASK_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -66,10 +62,9 @@ export const addTaskSuccess = () => {
     };
 };
 
-export const addTaskFailure = (error) => {
+export const addTaskFailure = () => {
     return {
         type: actions.ADD_TASK_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -92,10 +87,9 @@ export const updateTaskSuccess = () => {
     };
 };
 
-export const updateTaskFailure = (error) => {
+export const updateTaskFailure = () => {
     return {
         type: actions.UPDATE_TASK_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -116,10 +110,9 @@ export const deleteTaskSuccess = () => {
     };
 };
 
-export const deleteTaskFailure = (error) => {
+export const deleteTaskFailure = () => {
     return {
         type: actions.DELETE_TASK_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -139,10 +132,9 @@ export const fetchUserAssignedTasksSuccess = (user) => {
     };
 };
 
-export const fetchUserAssignedTasksFailure = (error) => {
+export const fetchUserAssignedTasksFailure = () => {
     return {
         type: actions.USER_TASK_FILTER_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -160,10 +152,9 @@ export const showAllTaskFilterSuccess = () => {
     };
 };
 
-export const showAllTaskFilterFailure = (error) => {
+export const showAllTaskFilterFailure = () => {
     return {
         type: actions.SHOW_ALL_TASKS_FILTER_FAILURE,
-        error: errorMsg,
     };
 };
 
@@ -183,10 +174,9 @@ export const fetchSearchResultsSuccess = (searchInput) => {
     };
 };
 
-export const fetchSearchResultsFailure = (error) => {
+export const fetchSearchResultsFailure = () => {
     return {
         type: actions.FETCH_SEARCH_RESULTS_FAILURE,
-        error: errorMsg,
     };
 };
 

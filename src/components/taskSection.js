@@ -8,13 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-
 const TaskSection = (props) => {
     const [taskId, setTaskId] = useState(undefined);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [buttonName, setButtonName] = useState('');
 
     const { taskCardList, taskSection, dispatch, userAssignedTasks, userAssignedTasksFilterRequest, task, user, hasSearchResultFetched, searchResults } = props;
+
 
     const displayTaskCard = (taskCardList) => {
         const taskCards = taskCardList && taskCardList
@@ -102,8 +102,8 @@ const TaskSection = (props) => {
                             {...provided.droppableProps}
                         >
                             {userAssignedTasksFilterRequest ? displayTaskCard(userAssignedTasks) :
-                                hasSearchResultFetched ? displayTaskCard(searchResults) :
-                                    displayTaskCard(taskCardList)}
+                                hasSearchResultFetched ? displayTaskCard(searchResults) : displayTaskCard(taskCardList)}
+
                             {provided.placeholder}
                         </ul>
                     )}
@@ -128,15 +128,20 @@ const TaskSection = (props) => {
 TaskSection.defaultProps = {
     taskCardList: [],
     task: '',
+    userAssignedTasks: [],
+    searchResults: [],
 };
 
+
 TaskSection.propTypes = {
-    taskCardList: PropTypes.array,
-    taskSection: PropTypes.object,
-    userAssignedTasks: PropTypes.array,
-    userAssignedTasksFilterRequest: PropTypes.bool,
     task: PropTypes.string,
-    user: PropTypes.string
+    user: PropTypes.string,
+    taskSection: PropTypes.object,
+    taskCardList: PropTypes.array,
+    searchResults: PropTypes.array,
+    userAssignedTasks: PropTypes.array,
+    hasSearchResultFetched: PropTypes.bool,
+    userAssignedTasksFilterRequest: PropTypes.bool,
 };
 
 

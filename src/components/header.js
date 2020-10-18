@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import users from '../dataStorage/usersData';
 import { fetchUserAssignedTasksRequest, showAllTaskFilterRequest, fetchSearchResultsRequest } from '../redux/actions/taskActions';
@@ -6,9 +6,29 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const Header = (props) => {
-    const { dispatch } = props
+    const { dispatch, hasSearchResultFetched, searchResults, userAssignedTasksFilterRequest, userAssignedTasks } = props
     const [searchInput, setSearchInput] = useState('');
+
+    useEffect(() => {
+        if ((hasSearchResultFetched && searchResults.length < 1) || (userAssignedTasksFilterRequest && userAssignedTasks.length < 1)) {
+            displayNotification();
+        }
+    }, [hasSearchResultFetched, userAssignedTasksFilterRequest, userAssignedTasks, searchResults]);
+
+    const displayNotification = () => {
+        toast.info('No records found.', {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 2000,
+        });
+    };
+
+
 
     const handleSearchInputChange = (event) => {
         setSearchInput(event.target.value);
@@ -57,15 +77,24 @@ const Header = (props) => {
 
 Header.defaultProps = {
     users: [],
+    userAssignedTasks: [],
+    searchResults: [],
 };
 
 Header.propTypes = {
     dispatch: PropTypes.func.isRequired,
+    searchResults: PropTypes.array,
+    userAssignedTasks: PropTypes.array,
+    hasSearchResultFetched: PropTypes.bool,
+    userAssignedTasksFilterRequest: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
     return {
         hasSearchResultFetched: state.tasks.hasSearchResultFetched,
+        searchResults: state.tasks.searchResults,
+        userAssignedTasks: state.tasks.userAssignedTasks,
+        userAssignedTasksFilterRequest: state.tasks.userAssignedTasksFilterRequest,
     };
 };
 

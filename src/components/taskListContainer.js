@@ -9,10 +9,9 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-
 const TaskListContainer = (props) => {
 
-    const { tasks, hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch } = props;
+    const { tasks, hasTaskAdded, hasTaskDeleted, hasTaskUpdated, dispatch, error, errorMsg } = props;
 
     useEffect(() => {
         dispatch(fetchTasksRequest());
@@ -35,7 +34,14 @@ const TaskListContainer = (props) => {
                 autoClose: 2000,
             });
         }
-    }, [hasTaskAdded, hasTaskUpdated, hasTaskDeleted, dispatch]);
+        if (error) {
+            toast.error(errorMsg, {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 2000,
+            });
+        }
+
+    }, [hasTaskAdded, hasTaskUpdated, hasTaskDeleted, dispatch, error, errorMsg]);
 
 
 
@@ -124,6 +130,7 @@ const TaskListContainer = (props) => {
 
 TaskSection.defaultProps = {
     taskSections: [],
+    tasks: [],
 };
 
 TaskListContainer.propTypes = {
@@ -132,6 +139,8 @@ TaskListContainer.propTypes = {
     hasTaskAdded: PropTypes.bool,
     hasTaskDeleted: PropTypes.bool,
     hasTaskUpdated: PropTypes.bool,
+    error: PropTypes.bool,
+    errorMsg: PropTypes.string,
 };
 
 
@@ -142,6 +151,8 @@ const mapStateToProps = (state) => {
         hasTaskAdded: state.tasks.hasTaskAdded,
         hasTaskDeleted: state.tasks.hasTaskDeleted,
         hasTaskUpdated: state.tasks.hasTaskUpdated,
+        error: state.tasks.error,
+        errorMsg: state.tasks.errorMsg,
     };
 };
 

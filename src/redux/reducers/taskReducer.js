@@ -3,7 +3,8 @@ import * as actions from '../actions/actionTypes';
 const initialState = {
     isLoading: false,
     tasks: [],
-    error: '',
+    error: false,
+    errorMsg: '',
     task: {},
     hasTaskAdded: false,
     hasTaskUpdated: false,
@@ -14,6 +15,8 @@ const initialState = {
     hasSearchResultFetched: false,
 };
 
+let errorMsg = 'Oops!! Something went wrong'
+
 const taskReducer = (state = initialState, action) => {
     switch (action.type) {
         // Handling actions for all tasks
@@ -21,7 +24,7 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                error: '',
+                // error: false,
             };
 
         case actions.FETCH_ALL_TASKS_SUCCESS:
@@ -34,15 +37,17 @@ const taskReducer = (state = initialState, action) => {
                 userAssignedTasksFilterRequest: false,
                 hasSearchResultFetched: false,
                 tasks: action.payload,
-                error: '',
+                error: false,
             };
 
         case actions.FETCH_ALL_TASKS_FAILURE:
+            errorMsg = 'Oops!! Couldn\'t  able to fetch records!! Please check your url.';
             return {
                 ...state,
                 isLoading: false,
                 tasks: [],
-                error: action.error,
+                error: true,
+                errorMsg,
             };
 
 
@@ -52,7 +57,7 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                error: '',
+                error: false,
             };
 
         case actions.FETCH_TASK_SUCCESS:
@@ -62,7 +67,7 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 task: fetchedTask || {},
                 isLoading: false,
-                error: '',
+                error: false,
             };
 
         case actions.FETCH_TASK_FAILURE:
@@ -70,7 +75,8 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 task: {},
-                error: action.error,
+                error: true,
+                errorMsg,
             };
 
         // Handling actions for adding task
@@ -79,7 +85,7 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 hasTaskAdded: false,
-                error: '',
+                error: false,
             };
 
         case actions.ADD_TASK_SUCCESS:
@@ -87,14 +93,16 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 hasTaskAdded: true,
-                error: '',
+                error: false,
             };
 
         case actions.ADD_TASK_FAILURE:
+            errorMsg = 'Oops!! Couldn\'t  able to save your task!! Try again.';
             return {
                 ...state,
                 hasTaskAdded: false,
-                error: action.error,
+                error: true,
+                errorMsg,
             };
 
 
@@ -104,7 +112,7 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 hasTaskUpdated: false,
-                error: '',
+                error: false,
             };
 
         case actions.UPDATE_TASK_SUCCESS:
@@ -113,14 +121,16 @@ const taskReducer = (state = initialState, action) => {
                 isLoading: false,
                 hasTaskUpdated: true,
                 task: {},
-                error: '',
+                error: false,
             };
 
         case actions.UPDATE_TASK_FAILURE:
+            errorMsg = 'Oops!! Couldn\'t  able to update your task!! Try again.';
             return {
                 ...state,
                 hasTaskUpdated: false,
-                error: action.error,
+                error: true,
+                errorMsg,
             };
 
 
@@ -130,7 +140,7 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: true,
                 hasTaskDeleted: false,
-                error: '',
+                error: false,
             };
 
         case actions.DELETE_TASK_SUCCESS:
@@ -138,14 +148,16 @@ const taskReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 hasTaskDeleted: true,
-                error: '',
+                error: false,
             };
 
         case actions.DELETE_TASK_FAILURE:
+            errorMsg = 'Oops!! Couldn\'t  able to delete your task!! Try again.';
             return {
                 ...state,
                 hasTaskDeleted: false,
-                error: action.error,
+                error: true,
+                errorMsg,
             };
 
 
@@ -156,7 +168,7 @@ const taskReducer = (state = initialState, action) => {
                 isLoading: true,
                 userAssignedTasksFilterRequest: false,
                 hasSearchResultFetched: false,
-                error: '',
+                error: false,
             };
 
 
@@ -166,7 +178,7 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 userAssignedTasks,
-                error: '',
+                error: false,
                 isLoading: false,
                 hasSearchResultFetched: false,
                 userAssignedTasksFilterRequest: true,
@@ -176,8 +188,9 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 hasTaskDeleted: false,
-                error: action.error,
+                error: true,
                 isLoading: false,
+                errorMsg,
             };
 
         // Handling actions for show all tasks filter
@@ -185,7 +198,7 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true,
-                error: '',
+                error: false,
             };
 
         case actions.SHOW_ALL_TASKS_FILTER_SUCCESS:
@@ -194,15 +207,17 @@ const taskReducer = (state = initialState, action) => {
                 isLoading: true,
                 userAssignedTasksFilterRequest: false,
                 hasSearchResultFetched: false,
+                error: false,
             };
 
         case actions.SHOW_ALL_TASKS_FILTER_FAILURE:
             return {
                 ...state,
                 isLoading: false,
-                error: action.error,
+                error: true,
                 userAssignedTasksFilterRequest: false,
                 hasSearchResultFetched: false,
+                errorMsg,
             };
 
 
@@ -210,22 +225,25 @@ const taskReducer = (state = initialState, action) => {
             return {
                 ...state,
                 hasSearchResultFetched: false,
+                error: false,
             };
 
         case actions.FETCH_SEARCH_RESULTS_SUCCESS:
             const searchInput = action.payload;
-            const matchedTasks = state.tasks.filter((task) => task.task === searchInput);
+            const matchedTasks = state.tasks.filter((task) => task.task.toLowerCase() === searchInput.toLowerCase());
             return {
                 ...state,
                 searchResults: matchedTasks,
                 hasSearchResultFetched: true,
+                error: false,
             };
 
         case actions.FETCH_SEARCH_RESULTS_FAILURE:
             return {
                 ...state,
-                error: action.error,
+                error: true,
                 hasSearchResultFetched: false,
+                errorMsg,
             };
 
         case actions.TASK_DRAG_AND_DROP_REQUEST:
