@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import users from '../dataStorage/usersData';
 
 
 const Modal = (props) => {
     const { closeModal, onSubmit, buttonName, defaultUserValue, task } = props;
-
     const [newTask, setNewTask] = useState(task || '');
     const [user, setUser] = useState(defaultUserValue);
     const [error, setError] = useState({ hasError: false, errorMsg: '' });
+    let modalRef = null;
+
+    useEffect(() => {
+        // To check and hide modal if the click is outside modal.
+        const handleCloseModal = (event) => {
+            if (modalRef && !modalRef.contains(event.target)) {
+                closeModal();
+            }
+        }
+        document.addEventListener('click', handleCloseModal);
+        return () => {
+            document.removeEventListener('click', handleCloseModal);
+        }
+    }, [closeModal, modalRef]);
 
 
     const handleTaskChange = (event) => {
@@ -34,10 +47,9 @@ const Modal = (props) => {
 
     const userList = users.map((user) => <option key={user.id} value={user.name}>{user.name}</option>);
 
-
     return (
         <section className='modal'>
-            <div className='modal-content'>
+            <div className='modal-content' ref={(node) => (modalRef = node)}>
                 <header>
                     <button onClick={closeModal} className='modal-close-btn'>X</button>
                 </header>
