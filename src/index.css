@@ -219,6 +219,8 @@ input, button {
   height: 100%;
   display: flex;
   justify-content: center;
+  transition: all ease 1s;
+
 }
 
 .modal-content {
@@ -228,6 +230,22 @@ input, button {
   height: 65vh;
   background-color: #fff;
   border-radius: 10px;
+
+  /* Modal animation */
+  animation-name: show-modal;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in-out;
+
+}
+
+/* Modal animation */
+@keyframes show-modal {
+  0% {opacity: 0.2;}
+  25%{opacity: 0.4;}
+  50%{opacity: 0.6;}
+  75%{opacity: 0.8;}
+  100%{opacity: 1;}
+
 }
 
 .modal-content header {
@@ -247,7 +265,6 @@ input, button {
   color: #fff;
   transform: scale(1.1);
 }
-
 
 /* Add task form  style*/
 .add-task-form {
@@ -294,9 +311,6 @@ label {
   color: rgb(248, 11, 11);;
   padding: 0 0.5em;
 }
-
-
-
 
 
 
