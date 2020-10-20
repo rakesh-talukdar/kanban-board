@@ -230,7 +230,14 @@ const taskReducer = (state = initialState, action) => {
 
         case actions.FETCH_SEARCH_RESULTS_SUCCESS:
             const searchInput = action.payload;
-            const matchedTasks = state.tasks.filter((task) => task.task.toLowerCase() === searchInput.toLowerCase());
+            const matchedTasks = state.tasks.filter((taskObj) => {
+                let taskString = '';
+                if (taskObj.task !== '') {
+                    taskString += taskObj.task.toString().toLowerCase().trim();
+                }
+                return taskString.match(searchInput);
+            });
+
             return {
                 ...state,
                 searchResults: matchedTasks,

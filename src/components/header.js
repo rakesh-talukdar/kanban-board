@@ -1,25 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import users from '../dataStorage/usersData';
 import { fetchUserAssignedTasksRequest, showAllTaskFilterRequest, fetchSearchResultsRequest } from '../redux/actions/taskActions';
 import PropTypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-
-
+import { debounce } from 'lodash';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 const Header = (props) => {
-    const { dispatch, hasSearchResultFetched, searchResults, userAssignedTasksFilterRequest, userAssignedTasks } = props
-    const [searchInput, setSearchInput] = useState('');
+    const { dispatch, userAssignedTasksFilterRequest, userAssignedTasks } = props
 
     useEffect(() => {
-        if ((hasSearchResultFetched && searchResults.length < 1) || (userAssignedTasksFilterRequest && userAssignedTasks.length < 1)) {
+        if (userAssignedTasksFilterRequest && userAssignedTasks.length < 1) {
             displayNotification();
         }
-    }, [hasSearchResultFetched, userAssignedTasksFilterRequest, userAssignedTasks, searchResults]);
+    }, [userAssignedTasksFilterRequest, userAssignedTasks]);
 
     const displayNotification = () => {
         toast.info('No records found.', {
@@ -29,15 +24,18 @@ const Header = (props) => {
     };
 
 
-
-    const handleSearchInputChange = (event) => {
-        setSearchInput(event.target.value);
+    const handleSearchQuery = (event) => {
+        const searchInput = event.target.value;
+        if (searchInput.length > 1) {
+            const searchToken = searchInput.toLowerCase().split(' ').filter((token) => token.trim() !== '');
+            const searchInputRegex = new RegExp(searchToken.join(' '), 'gi');
+            fetchSearchQueryData(searchInputRegex);
+        }
     };
 
-    const handleSearchSubmit = (event) => {
-        event.preventDefault();
-        dispatch(fetchSearchResultsRequest(searchInput.trim()));
-    };
+    const fetchSearchQueryData = debounce((searchQueryToken) => {
+        dispatch(fetchSearchResultsRequest(searchQueryToken));
+    }, 500)
 
 
 
@@ -53,9 +51,8 @@ const Header = (props) => {
                 <h1 className='heading'>Kanban Board</h1>
                 <div className='search-and-filter-wrapper'>
                     <div className='search-container'>
-                        <form className='search-form' onSubmit={handleSearchSubmit}>
-                            <input type='text' className='search-input' onChange={handleSearchInputChange} placeholder='Search task..' />
-                            <button className='search-btn' title='search'><FontAwesomeIcon icon={faSearch} /></button>
+                        <form className='search-form'>
+                            <input type='text' className='search-input' onChange={handleSearchQuery} placeholder='Search task..' />
                         </form>
                     </div>
                     <div className='filter-container'>
@@ -78,21 +75,16 @@ const Header = (props) => {
 Header.defaultProps = {
     users: [],
     userAssignedTasks: [],
-    searchResults: [],
 };
 
 Header.propTypes = {
     dispatch: PropTypes.func.isRequired,
-    searchResults: PropTypes.array,
     userAssignedTasks: PropTypes.array,
-    hasSearchResultFetched: PropTypes.bool,
     userAssignedTasksFilterRequest: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
     return {
-        hasSearchResultFetched: state.tasks.hasSearchResultFetched,
-        searchResults: state.tasks.searchResults,
         userAssignedTasks: state.tasks.userAssignedTasks,
         userAssignedTasksFilterRequest: state.tasks.userAssignedTasksFilterRequest,
     };

@@ -57,7 +57,7 @@ input, button {
 }
 .search-input {
   padding: 0.8em 0.5em;
-  width: 68%;
+  width: 90%;
   border-radius: 5px;
 }
 .search-btn {
@@ -326,7 +326,32 @@ label {
 
 
 
+
+@media (max-width: 1600px) {
+  .header-wrapper {
+    flex-basis: 62%;
+    display: flex;
+    justify-content: space-between;
+  }  
+}
+@media (max-width: 1400px) {
+  .header-wrapper {
+    flex-basis: 70%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 @media (max-width: 1300px) {
+  .header-wrapper {
+    flex-basis: 80%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+
+@media (max-width: 1100px) {
   .header-wrapper {
     flex-basis: 80%;
     display: flex;
